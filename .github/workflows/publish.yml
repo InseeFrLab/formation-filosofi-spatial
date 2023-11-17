@@ -25,7 +25,7 @@ jobs:
 
       - name: Render quarto
         run: |
-          Rscript -e 'install.packages(c("remotes"))'
+          Rscript -e 'install.packages(c("quarto"))'
           Rscript -e "quarto::quarto_render('travaux-pratiques/index.qmd')"
           Rscript -e "quarto::quarto_render('travaux-pratiques/installations.qmd')"
           Rscript -e "quarto::quarto_render('presentation/index.qmd', output_format = 'insee-jaune-revealjs')"
