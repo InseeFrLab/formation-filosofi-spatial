@@ -34,7 +34,7 @@ jobs:
           
       - name: Publish html
         run: |
-          mkdir build
+          mkdir public
           cp -r presentation travaux-pratiques public
           
       - name: Push to gh-pages branch
