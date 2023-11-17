@@ -1,1 +1,1 @@
-FROM inseefrlab/onyxia-rstudio:ds-r4.2.3-2022.10.07
+FROM inseefrlab/onyxia-rstudio:r4.3.1
