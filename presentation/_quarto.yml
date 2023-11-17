@@ -1,0 +1,70 @@
+project:
+  title: "Présentation quarto-Insee"
+  render:
+    - "index.qmd"
+    - "01_styleParDefaut.qmd"
+    - "02_modulariteSupport.qmd"
+    - "03_fenetreModale.qmd"
+    - "04_exportPdf.qmd"
+    - "05_documentation.qmd"
+    
+format:
+  insee-rouge-revealjs: default
+  insee-jaune-revealjs: default
+  insee-vert-revealjs: default
+  odt: 
+    prefer-html: true
+    
+header-includes: |
+  <link rel="icon" type="image/png" sizes="32x32" href="img/logos/png/Logo_Insee_TailleMINI.jpg">
+include-after-body: ["modulesCompl/footer.html"]
+# logo: img/logos/logoDeVotreService.png
+    
+embed-resources: true
+df-print: paged
+lang: "fr"
+
+slide-number: c/t
+progress: true
+controls-layout: bottom-right
+background-transition: fade
+navigation-mode: linear #vertical
+history: true
+transition-speed: slow
+number-sections: true
+number-depth: 2
+
+link-external-newwindow: true
+# link-external-icon: true
+
+code-fold: true
+code-summary: "Code"
+code-copy: true
+highlight-style: atom-one
+
+menu: {
+  side: 'left',
+  width: 'wide',
+  markers: true,
+  transitions: true,
+  custom: [
+      {
+        title: 'Plugins',
+        icon: '<i class="fa-solid fa-circle-info"></i>',
+        src: 'modulesCompl/customMenu.html'
+      }
+    ]
+}
+  
+width: 1920
+height: 1080
+
+theme: css/Insee_Commun.scss
+css: [css/default.css, css/modal.css, css/stylePerso.css]
+
+revealjs-plugins:
+  - pointer
+  - confetti
+  - verticator
+filters:
+  - roughnotation

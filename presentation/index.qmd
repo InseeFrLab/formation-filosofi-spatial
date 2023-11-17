@@ -1,0 +1,214 @@
+---
+title: "Comment manipuler et faire parler</br>les données spatiales de revenus</br>diffusées par l’Insee ?"
+subtitle: "ATELIER DATAJOURNALISTES"
+date: "2023-11-28"
+date-format: "DD/MM/YYYY"
+description: |
+  Atelier pour datajournalistes
+
+slide-tone: false # for blind readers
+chalkboard: false # press the B key to toggle chalkboard
+transition: slide
+fig-cap-location: bottom
+
+toc: true
+toc-title: Sommaire
+toc-depth: 1
+toc-float: true
+
+# multiplex: true
+execute:
+  echo: false
+  warning: false
+  cache: false
+editor:
+  render-on-save: true
+---
+
+
+{{< include 01_partieMG.qmd >}}
+
+{{< include 02_partieKA.qmd >}}
+
+
+
+## {#pageDeFin data-menu-title="Page finale" .unnumbered .backgroundPageFinale}
+
+::: {.textPageFinale}
+
+Merci de votre attention
+
+:::
+
+::: {.textFooter .no-print-pdf}
+
+Retrouvez nous sur
+
+:::
+
+:::: {.columns}
+
+::: {.column .droite .coordonnees width=33%}
+
+- Kim Antunez
+- Solène Colin
+- Mathilde Gerardin
+
+:::
+
+::::
+
+::: {.column .droite .coordonnees width=100%}
+
+- Direction Générale de l'Insee
+
+- Département de l'action régionale
+
+:::
+
+
+## Titre transparent {.backgroundStandard .unnamed .unnumbered .transparent}
+
+::: enteteAvecTitre
+Annexe - Quels sont les territoires les plus pauvres ?
+:::
+
+-   Le taux de pauvreté est plus élevé en Outre-Mer, dans le Nord de la France, autour de l'arc méditerrannéen et en Seine-Saint-Denis\
+
+-   D'importantes disparités entre les territoires, à plusieurs échelles :\
+
+    -   à l'infra-régional : par exemple en Ile-de-France, Yvelynes (9,7 % de personnes pauvres) & Seine-Saint-Denis (27,6 % de personnes pauvres)\
+    -   à l'infra-départemental : par exemple dans le Finistère, la CA du Pays de Landerneau (6,9 % de personnes pauvres) jouxte la CC Monts d'Arrée (20,7 % de personnes pauvres)\
+    -   à l'intérieur même des villes : par exemple, entre le Nord et le Sud de Marseille\
+
+## Titre transparent {.backgroundStandard .unnamed .unnumbered .transparent}
+
+::: enteteAvecTitre
+Annexe - Les zonages d'étude
+:::
+
+L'utilisation des **zonages statistiques** (ou *zonages d'étude*) permet de s'affranchir des limites administratives et d'analyser ensemble des territoires partageant des caractéristiques communes :
+
+-   D'après la [grille communale de densité](https://www.insee.fr/fr/information/6439600) : la pauvreté est plus fréquente dans l'**urbain** que dans le rural\
+    -   16,7 % des personnes sont pauvres dans l'urbain, contre 10,9 % des personnes dans le rural
+-   D'après le zonage en [aires d'attraction des villes](https://www.insee.fr/fr/information/4803954), la pauvreté est plus fréquente dans les **pôles** des aires d'attraction des villes que dans les couronnes\
+    -   18,5 % des habitants des pôles sont pauvres, contre 10.5% des habitants des couronnes
+
+
+## Titre transparent {.backgroundStandard .unnamed .unnumbered .transparent}
+
+::: enteteAvecTitre
+Annexe - Illustrations reproductibles de l'opposition pôles/couronnes
+:::
+
+```{r}
+#| code-fold: true
+#| code-summary: "Afficher le code"
+#| eval: false
+#| echo: true
+
+library(readxl)
+library(dplyr)
+library(ggplot2)
+library(sf)
+library(mapsf)
+
+
+## Importer les données Filosofi
+
+url <- c("https://www.insee.fr/fr/statistiques/fichier/6692392/base-cc-filosofi-2020_XLSX.zip")
+
+temp <- tempfile()
+temp2 <- tempfile()
+
+download.file(url, temp)
+
+unzip(zipfile = temp, exdir = temp2)
+
+filo <- readxl::read_xlsx(file.path(temp2, "base-cc-filosofi-2020-geo2023.xlsx"), 
+                          sheet = "COM", 
+                          skip = 5) %>%
+  dplyr::select(CODGEO, LIBGEO, TP6020) %>%
+  dplyr::mutate(TP6020 = as.numeric(gsub(pattern = ",", replacement = ".", x = TP6020)))
+colnames(filo) <- tolower(colnames(filo))
+
+unlink(c(temp, temp2))
+rm(url, temp, temp2)
+
+
+## Importer les contours des AAV
+
+url <- c("https://www.insee.fr/fr/statistiques/fichier/4803954/fonds_aav2020_2023.zip")
+
+temp <- tempfile()
+temp2 <- tempfile()
+temp3 <- tempfile()
+
+download.file(url, temp)
+
+unzip(zipfile = temp, exdir = temp2)
+
+zipfiles <- list.files(temp2)
+
+unzip(zipfile = file.path(paste(temp2, zipfiles[2], sep = "\\")), exdir = temp3)
+
+
+## Importer shapefile
+
+shp_com <- st_read(dsn = temp3,
+                   layer = "com_aav2020_2023")
+
+unlink(c(temp, temp2, temp3))
+rm(url, temp, temp2, temp3)
+
+
+## Restriction AAV
+
+# Quelques exemples d'AAV qui marchent "bien"
+AAV <- c("Marseille - Aix-en-Provence")
+AAV <- c("Strasbourg (partie française)")
+AAV <- c("Angers")
+AAV <- c("Poitiers")
+AAV <- c("Lyon")
+AAV <- c("Rennes")
+
+
+## Merge des données
+
+don <- shp_com %>% 
+  dplyr::filter(libaav2020 == AAV) %>%
+  left_join(filo, by = c("codgeo", "libgeo"))
+
+
+## Récupérer les contours du pôle de l'AAV pour l'afficher en rouge sur la carte
+
+contours_pole <- don %>% 
+  dplyr::filter(cateaav != "Commune de la couronne") %>%
+  st_union()
+
+
+## Carte AAV
+
+mf_theme("default")
+par(mfrow=c(1,1))
+mf_map(
+  x= don,
+  var = "tp6020", 
+  border = "white",
+  leg_no_data = "Secret statistique",
+  type = "choro",
+  breaks = c(5,8,12,16,max(don$tp6020, na.rm = T)),
+  col_na = "grey", 
+  leg_title = "Taux de pauvreté"
+  ) 
+plot(contours_pole, border = "red",lwd = 2, add = T)
+
+mf_layout(
+  title = paste("Taux de pauvreté des communes de l'AAV de", AAV),
+  credits = "",
+  arrow = F
+)
+```
+
+![](cartes_tx_pauv_aav.png){fig-align="center"}
+

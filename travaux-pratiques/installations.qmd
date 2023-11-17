@@ -1,0 +1,78 @@
+---
+title: "Comment manipuler et faire parler les données spatiales de revenus diffusées par l’Insee ?"
+subtitle: "Installer les logiciels R, RStudio et les librairies nécessaires"
+lang: fr 
+author: "Kim Antunez, Solène Colin, Mathilde Gerardin"
+execute:
+  echo: true
+  eval: false
+  warning: true
+language:
+  title-block-author-single: Auteurs
+format:
+  pdf:
+    toc: false
+    number-sections: true
+    theme: [default]
+highlight-style: github
+include-in-header: header.tex
+
+---
+
+![](images/blois-insee-logo.png){fig-align="center" width="40%"}
+
+## R et RStudio
+
+Il existe de nombreux langages de programmation statistiques : Python, SPSS, Julia, Stata, R...
+
+Ils diffèrent tous fondamentalement des tableurs comme Excel. 
+
+### Le logiciel R
+
+R est un langage de programmation statistique et un environnement logiciel pour le calcul statistique et la datavisualisation.
+
+Sa popularité dans le domaine de la science des données est due à : 
+
+- sa nature **open-source** (R & RStudio)
+- ses **bibliothèques étendues**
+- ses **capacités de manipulation des données**
+- ses **outils d'analyse statistique**
+- sa **communauté active d'utilisateurs**
+
+### L'interface RStudio
+
+RStudio est un environnement de développement intégré (EDI) spécifiquement conçu pour la programmation R et très largement utilisé.
+
+Il fournit une interface conviviale pour l'écriture, l'exécution et la gestion du code R (autocomplétion du code, exploration des variables, fenêtre intégrée pour la datavisualisation...).
+
+![Vue d'ensemble de l'interface RStudio : Console, Scripts, Environnement, Figures, Aide, Fichiers...](images/RStudio0.png)
+
+##  Besoins logiciels pour les travaux pratiques
+
+### Installer R et RStudio
+
+- **Téléchargez et installez R**. Visitez le [site web du projet R](https://www.r-project.org/) et choisissez la page de téléchargement appropriée pour votre système d'exploitation ([Mac](https://cran.rstudio.com/bin/macosx/) ou [Windows](https://cran.rstudio.com/bin/windows/base/)).
+
+- **Téléchargez et installez RStudio (EDI)**. Visitez le [site web posit](https://posit.co/) et téléchargez la version [RStudio Desktop](https://posit.co/download/rstudio-desktop/#download).
+
+
+### Premiers pas
+
+- Sélectionner File → New File → R Script 
+
+- Sauver ce script à un endroit dont vous vous souviendrez sur votre ordinateur et l'appeler `revenus_insee.r` 
+
+
+Les librairies R sont essentielles pour de nombreuses fonctionnalités. Beaucoup d'entre elles sont sur le [CRAN](https://cran.r-project.org/) (Comprehensive R Archive Network) et s'installent grâce à la fonction `install.packages()`. 
+
+- Copier ce code utile à l'installation des différentes librairies dans votre script
+
+```{r installPackages}
+## Liste des librairies utilisées
+librairies <-  c("ggplot2", "mapsf", "dplyr", "stringr", "sf")
+## Installation
+install.packages(librairies)
+```
+
+- Appuyez sur `Ctrl-Enter` (Win) or `Cmd-Enter` (Mac) pour exécuter ces lignes et ainsi installer les librairies dont vous aurez besoin pour la partie travaux pratiques.
+

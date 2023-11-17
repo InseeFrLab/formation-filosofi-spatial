@@ -1,0 +1,10 @@
+title: insee-communication aux entreprises et aux experts
+author: Romain Puyau
+contributes:
+  format:
+    revealjs:
+      css: [css/Insee_Vert_entreprises_experts.css]
+      title-slide-attributes:
+        data-background-image: img/com_entrepriseEtExperts/TitlePage.svg
+        data-background-size: contain
+        data-background-opacity: "1"

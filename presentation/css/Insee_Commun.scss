@@ -1,0 +1,595 @@
+/*-- scss:defaults --*/
+
+$font-family-sans-serif: "Open Sans", "Arial", "Helvetica" ;
+$presentation-heading-font: $font-family-sans-serif;
+$presentation-heading-color: #383d3d !default;
+$h1-font-size: 2em;
+$h2-font-size: 1.6em;
+$h3-font-size: 1.3em;
+$h4-font-size: 0.9em;
+$h5-font-size: 0.6em;
+$h6-font-size: 0.5em;
+
+// colors
+$body-bg: #f0f1eb !default;
+$body-color: #000 !default;
+$link-color:  #3ea0e5 !default;
+$selection-bg: #26351c !default;
+$navigation-tools-color: #3ea0e5 !default;
+$main-color-text: #0F417A !default;
+$second-color-text: #5B8ED4 !default;
+$yellow-color: #ffda5a !default;
+$grey-color-endPage: #646363 !default;
+$color-text-menu: #bebebe !default ;
+
+/*-- scss:rules --*/
+
+/**************GENERIQUE*******************/
+
+h1{
+  font-size: $h1-font-size;
+}
+
+.level2{
+  h2{
+  font-size: $h2-font-size ;
+  padding-top: 1%;
+}
+
+  h3{
+    font-size: $h3-font-size;
+  }
+  
+  h4{
+    font-size: $h4-font-size;
+  }
+  
+  h5{
+    font-size: $h5-font-size;
+  }
+  
+  h6{
+    font-size: $h6-font-size;
+  }
+}
+
+
+li {
+  font-family: $font-family-sans-serif;
+  color: $main-color-text;
+}
+
+p {
+  color: black;
+}
+
+.reveal {
+  .controls, .progress, .verticator {
+    color: $navigation-tools-color;
+  }
+  a {
+    line-height: 1.3em;
+    font-weight: bold;
+  }
+  a:hover {
+    text-decoration: underline;
+    color: #5a95cf;
+  }
+  a:active {
+    color: blueviolet;
+  }
+  h1, h4, h5, h6 {
+  color: $main-color-text;
+  }
+  h2 {
+    color: $second-color-text;
+  }
+  h3 {
+    color: #B0AEAE;
+  }
+}
+
+.slide-number{
+  top: 2%;
+  height: fit-content;
+  background-color: $main-color-text !important;
+  color: $yellow-color !important;
+  font-weight: bold;
+}
+
+.level2{
+  ul {
+    li {//liste de niveau 1
+      list-style-type: "– ";
+      font-size: 1em !important;
+    }
+    ul {
+      li {//liste de niveau 2
+        list-style-type: disc;
+        font-size: 0.9em !important;
+      }
+      ul {
+        li {//liste de niveau 3
+          list-style-type: "– ";
+          font-size: 0.8em !important;
+        }
+        ul{
+          li{//liste de niveau 4
+            list-style-type: disc;
+            font-size: 0.9em !important;
+          }
+          ul{
+            li{//liste de niveau 5
+              list-style-type: disc;
+              font-size: 0.9em !important;
+            }
+            ul{
+              li{//liste de niveau 6
+                list-style-type: disc;
+                font-size: 1em !important;
+              }
+            }
+          }
+        }
+      }
+    }
+  }  
+}
+
+
+/***********premiere page**********/
+
+p.date{
+  font-size: 65%;
+  text-align: left;
+}
+
+.reveal h1 {
+  font-style: normal;
+  font-weight: normal;
+  text-align: left;
+  font-size: 1.5em;
+}
+
+#title-slide{
+  hyphens: auto;
+  width: 100%;
+  height: 100%;
+}
+
+.reveal .title {
+  padding-top: 15%;
+}
+
+.reveal .subtitle {
+  text-align: left;
+  font-weight: bold;
+  color: $second-color-text;
+}
+
+#nomReunion {
+  top: 20%;
+  position: relative;
+}
+
+#nomReunion p {
+  font-size: 0.7em;
+  text-align: right;
+  color: $yellow-color;
+  margin: 0;
+  padding: 0 5px;
+  background-color: #0f417a;
+}
+
+.slide-logo{
+  max-height: 20% !important;
+  right: 5% !important;
+  bottom: -10px !important;
+}
+
+/***********Page Sommaire ************/
+
+#TOC {
+  height: 100% !important;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+#toc-title {
+  position: relative;
+  top: 4.4em;
+  float: right;
+  font-size: 0.7em;
+  padding-right: 1%;
+  padding-top: 0.5%;
+  color: $yellow-color;
+}
+
+#TOC ul {
+  font-size: 100%;
+  margin-top: 15%;
+  list-style-type: none;
+  padding-left: 15%;
+}
+
+#TOC ul li {
+  list-style-position: outside;
+  text-indent: -1em;
+  text-transform: uppercase;
+}
+
+#TOC ul li a {
+  font-weight: bold;
+}
+
+#TOC ul li:not(:last-child) {
+   margin-bottom: 15%;
+}
+
+/***********Page Titre ************/
+
+div.backgroundTitre{
+  max-width: 100%;
+  height: auto;
+/*  background-size: cover;*/
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+.bandeauTitre{
+  top: -473%;
+  position: absolute;
+  width: 535px;
+  right: -8%;
+  font-size: 0.7em;
+}
+
+.level1 {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  
+  h1 {
+    font-weight: bold;
+    text-transform: uppercase;
+    text-decoration: underline;
+  }
+}
+
+.header-section-number{
+  text-decoration: none;
+  display: inline-block;
+}
+
+.logoTopRightTitre{
+  width: 125px;
+  top: -630%;
+  position: absolute;
+  right: 0%;
+}
+
+
+/***********Page Standard************/
+
+div.backgroundStandard {
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+.bandeauStandard{
+  position: absolute;
+  right: 0;
+  font-size: 0.7em;
+  top: 7%;
+}
+
+.level2 {
+/*  ul li, p {
+    font-size: 0.7em;
+  }*/
+  h2 {
+    margin-top: 6%;
+  }
+}
+
+.enteteAvecTitre {
+  top: -5.5em;
+  position: relative;
+  text-align: center;
+  font-weight: bold;
+  text-transform: uppercase;
+/*  width: 100%;*/
+  
+  p {
+    color: $grey-color-endPage;
+  }
+}
+
+.logoTopRightStandard{
+  width: 130px;
+  top: -7%;
+  position: absolute;
+  right: 0;
+}
+
+/***********Page de fin************/
+
+div.backgroundPageFinale {
+  background-repeat: round;
+  background-size: cover;
+}
+
+.textPageFinale {
+  text-align: center;
+  font-weight: bold;
+  border-bottom: solid 5px $main-color-text;
+  width: 80%;
+  font-size: 1.8em;
+  
+  p {
+    color: $main-color-text;
+    font-size: 0.7em;
+  }
+}
+
+
+.textFooter {
+  bottom: 3%;
+  position: fixed;
+  left: 40%;
+  font-size: 0.8em;
+  
+  p {
+    color: $grey-color-endPage;
+    font-weight: bold;
+  }
+}
+
+.coordonnees {
+  font-size: 0.7em;
+  margin-top: 2em;
+  
+  ul li {
+    color: $grey-color-endPage;
+    font-weight: bold;
+    list-style-type: none;
+  }
+}
+
+
+.nomReunionFin {
+  position: relative;
+  top: 10em;
+  font-size: 0.8em;
+}
+
+.nomReunionFin p {
+  color: #fdc218;
+}
+
+.divDateFin {
+  position: relative;
+  text-align: right;
+  top: 8.4em;
+  font-size: 0.8em;
+}
+
+#dateFin {
+  color: #fdc218;
+}
+
+/******************MENU****************/
+
+.fa-sticky-note::before {
+  content: "\f249" !important;
+}
+
+.fa-adjust::before {
+  content: "\f042" !important;
+}
+
+.defaultCursor {
+  li {
+    cursor: default !important;
+  }
+  a {
+    cursor: default;
+  }
+}
+
+.messageInfoMenu {
+  padding-bottom: 15px;
+  border-bottom: 2px dotted;
+  p {
+    color: $color-text-menu;
+  }
+  
+  ul {
+    padding-left: 5px;
+    li {
+      list-style-type: "- ";
+      color: $color-text-menu;
+    }
+  }
+}
+
+/************FOOTER PRINCIPAL**************/
+
+#footerPersonnalise {
+  position: fixed;
+  bottom: 18px;
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+  font-size: 18px;
+  z-index: 2;
+  height: 40px;
+}
+
+img.logo {
+  width: 40px !important;
+  height: 40px !important;
+  margin-bottom: -1% !important;
+}
+
+.divCachee{
+  display: none !important;
+}
+
+
+/***************WIDGETS*******************/
+
+.plotly {
+  padding: 2%;
+}
+
+/***************AUTRES*******************/
+
+.aside-footnotes {
+  font-size: medium !important;
+}
+
+blockquote {
+  font-size: 50%;
+  font-style: italic !important;
+}
+
+summary{
+  cursor: pointer;
+}
+
+/***************FENETRE MODALE*******************/
+
+.modal {
+  header{
+   border-bottom: solid 2px gray;
+  }
+}
+
+.centerImgModal {
+  
+  img {
+    display: block;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+  
+  figcaption {
+    display: block;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    width: 50%;
+  }
+}
+
+/******************packages DT**********************/
+
+.datatables, .cell-output-display {
+  font-size: 70%;
+}
+
+.dataTables_length select {
+  font-size: 100%;
+}
+
+.dt-buttons {
+  float: right !important;
+  padding: 0 5px;
+}
+
+
+
+/******************PDF EXPORT VIEW MODE**********************/
+/*CSS quand on tape e*/
+
+.pdf-page {
+  position: relative !important;
+}
+
+.pdf-page>div.backgroundTitre{
+  position: relative !important;
+}
+
+.pdf-page>div.backgroundStandard{
+  position: relative !important;
+}
+
+.pdf-page>div.backgroundPageFinale{
+  position: relative !important;
+}
+
+.pdf-page div.textFooter {
+  visibility: hidden;
+}
+
+html.print-pdf div#footerPersonnalise {
+  visibility: hidden;
+}
+
+.pdf-page #toc-title{
+  top: 6.4em;
+}
+
+.pdf-page #TOC ul{
+  margin-top: 10%;
+}
+
+.print-pdf .slide-logo{
+  display: none !important;
+}
+
+.pdf-page .bandeauTitre{
+  display: none;
+}
+
+.pdf-page .logoTopRightTitre{
+  display: none;
+}
+
+.pdf-page .bandeauStandard{
+  display: none; 
+}
+
+.pdf-page .logoTopRightStandard{
+  display: none;
+}
+
+.pdf-page .nomReunionFin{
+  top: 18.5em !important;
+}
+
+.pdf-page .divDateFin{
+  top: 16.8em !important;
+}
+
+@media print {
+
+  .level2 h2 {
+    margin-top: 10%;
+  }
+  
+  .nomReunionFin{
+    display: none;
+  }
+
+  .divDateFin{
+    display: none;
+  }
+}
+
+/******************Ajouts Kim**********************/
+
+.transparent{
+  h2{
+  opacity: 0;
+  }
+}
+
+
+
+
+
+
+
+
+

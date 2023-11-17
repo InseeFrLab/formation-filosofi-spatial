@@ -1,0 +1,44 @@
+# Workflow derived from https://github.com/InseeFrLab/onyxia-quarto
+
+on:
+  push:
+    branches: 
+      - main
+#    paths:
+#      - tutorials/*
+
+name: Quarto Publish
+
+jobs:
+  build-deploy:
+    runs-on: macos-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: r-lib/actions/setup-pandoc@v1
+      - uses: r-lib/actions/setup-r@v1
+      - uses: r-lib/actions/setup-renv@v1
+
+      - name: Render quarto
+        run: |
+          Rscript -e 'install.packages(c("remotes"))'
+          Rscript -e "quarto::quarto_render('travaux-pratiques/index.qmd')"
+          Rscript -e "quarto::quarto_render('travaux-pratiques/installations.qmd')"
+          Rscript -e "quarto::quarto_render('presentation/index.qmd', output_format = 'insee-jaune-revealjs')"
+          
+      - name: Publish html
+        run: |
+          mkdir build
+          cp -r presentation travaux-pratiques public
+          
+      - name: Push to gh-pages branch
+        uses: crazy-max/ghaction-github-pages@v2
+        with:
+          target_branch: gh-pages
+          build_dir: build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

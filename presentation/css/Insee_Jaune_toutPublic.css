@@ -1,0 +1,250 @@
+
+/*Sommaire*/
+#TOC {
+  background-image: url(../img/com_toutPublic/PageSommaire_16_9_jaune.svg);
+}
+
+/*page sommaire*/
+.toc-section-number{
+  color: #0F417A ;
+}
+
+#TOC ul li a{
+  color: #0F417A ;
+}
+
+
+/*page Titre*/
+div.backgroundTitre{
+  background-image: url(../img/com_toutPublic/PagePartie_16_9_jaune.svg);
+}
+
+/*Page standard*/
+div.backgroundStandard {
+  background-image: url(../img/com_toutPublic/PageStandard_16_9_jaune.svg);
+}
+
+/*Page finale*/
+div.backgroundPageFinale {
+  background-image: url(../img/com_toutPublic/EndPage_16_9_jaune.svg);
+}
+
+
+
+/*CSS de l'impression pdf du navigateur (ctrl+p) Il s'appuie en partie sur le mode export (ex : background)*/
+
+@media print {
+  
+  #TOC{
+    position: relative !important;
+  }
+  
+    #pageDeFin{
+    position: relative !important;
+    top: -30em !important;
+  }
+  
+  .print_code details{
+    display: contents !important;
+  }
+  
+  
+/*Il faut personnaliser le css ci-dessous en fonction du type de page (titre/standard/etc.)
+Pas mis en place car il y a un décalage de +1 dans le nombre de pages à chaque fois qu'on change de chapitre*/
+  
+/*  .slide-number-pdf{
+    display: block;
+    font-size: 14px;
+    position: relative !important;
+    top: -80em;
+    left: 145em;
+    width: fit-content;
+    z-index: 31;
+  }*/
+
+
+
+/*
+à toi futur utilisateur, ce qui suit est dégueulasse, j'en suis conscient. 
+Cependant, je n'ai pas trouvé de meilleures solutions pour faire fonctionner l'export
+PDF. Le comportement du CSS diffère entre les thèmes Insee, et je ne sais pas pourquoi..
+Je ne sais pas non plus pourquoi je ne peux pas utiliser le CSS en regex suivant :
+[id^=chapters] ou [id^=section], qui aurait rendu la lecture plus agréable...Néanmoins,
+si tu trouves une solution plus propre que celle-ci, je prends !! :-)
+*/
+  
+  #chapters_0,
+  #chapters_1,
+  #chapters_2,
+  #chapters_3,
+  #chapters_4,
+  #chapters_5,
+  #chapters_6,
+  #chapters_7,
+  #chapters_8,
+  #chapters_9,
+  #chapters_10{
+    top: -15em !important;
+    position: relative !important;
+  }
+  
+  #section_0_1,
+  #section_0_2,
+  #section_0_3,
+  #section_0_4,
+  #section_0_5,
+  #section_0_6,
+  #section_0_7,
+  #section_0_8,
+  #section_0_9,
+  #section_0_10  {
+    top: -28em !important;
+    position: relative !important;
+  }
+  
+  
+  #section_1_1,
+  #section_1_2,
+  #section_1_3,
+  #section_1_4,
+  #section_1_5,
+  #section_1_6,
+  #section_1_7,
+  #section_1_8,
+  #section_1_9,
+  #section_1_10  {
+    top: -28em !important;
+    position: relative !important;
+  }
+  
+  
+  #section_2_1,
+  #section_2_2,
+  #section_2_3,
+  #section_2_4,
+  #section_2_5,
+  #section_2_6,
+  #section_2_7,
+  #section_2_8,
+  #section_2_9,
+  #section_2_10  {
+    top: -28em !important;
+    position: relative !important;
+  }
+  
+  
+  #section_3_1,
+  #section_3_2,
+  #section_3_3,
+  #section_3_4,
+  #section_3_5,
+  #section_3_6,
+  #section_3_7,
+  #section_3_8,
+  #section_3_9,
+  #section_3_10  {
+    top: -28em !important;
+    position: relative !important;
+  }
+  
+  #section_4_1,
+  #section_4_2,
+  #section_4_3,
+  #section_4_4,
+  #section_4_5,
+  #section_4_6,
+  #section_4_7,
+  #section_4_8,
+  #section_4_9,
+  #section_4_10  {
+    top: -28em !important;
+    position: relative !important;
+  }
+  
+  #section_5_1,
+  #section_5_2,
+  #section_5_3,
+  #section_5_4,
+  #section_5_5,
+  #section_5_6,
+  #section_5_7,
+  #section_5_8,
+  #section_5_9,
+  #section_5_10  {
+    top: -28em !important;
+    position: relative !important;
+  }
+  
+  
+  #section_6_1,
+  #section_6_2,
+  #section_6_3,
+  #section_6_4,
+  #section_6_5,
+  #section_6_6,
+  #section_6_7,
+  #section_6_8,
+  #section_6_9,
+  #section_6_10  {
+    top: -28em !important;
+    position: relative !important;
+  }
+  
+  #section_7_1,
+  #section_7_2,
+  #section_7_3,
+  #section_7_4,
+  #section_7_5,
+  #section_7_6,
+  #section_7_7,
+  #section_7_8,
+  #section_7_9,
+  #section_7_10  {
+    top: -28em !important;
+    position: relative !important;
+  }
+  
+  #section_8_1,
+  #section_8_2,
+  #section_8_3,
+  #section_8_4,
+  #section_8_5,
+  #section_8_6,
+  #section_8_7,
+  #section_8_8,
+  #section_8_9,
+  #section_8_10  {
+    top: -28em !important;
+    position: relative !important;
+  }
+  
+  #section_9_1,
+  #section_9_2,
+  #section_9_3,
+  #section_9_4,
+  #section_9_5,
+  #section_9_6,
+  #section_9_7,
+  #section_9_8,
+  #section_9_9,
+  #section_9_10  {
+    top: -28em !important;
+    position: relative !important;
+  }
+  
+  #section_10_1,
+  #section_10_2,
+  #section_10_3,
+  #section_10_4,
+  #section_10_5,
+  #section_10_6,
+  #section_10_7,
+  #section_10_8,
+  #section_10_9,
+  #section_10_10  {
+    top: -28em !important;
+    position: relative !important;
+  }
+
+}
+
