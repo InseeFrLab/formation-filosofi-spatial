@@ -1,3 +1,77 @@
 # Manipuler et interpréter des données au carreau {#chapters_3 .backgroundTitre}
 
-A venir
+## Titre transparent {.backgroundStandard .unnamed .unnumbered .transparent}
+
+::: enteteAvecTitre
+Visualisation interactive en ligne
+:::
+
+Les données de Filosofi sont également disponibles sur des **carreaux**
+
+
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+
+<center>de **1km**</center>
+[![https://statistiques-locales.insee.fr](images/stat_locales.png)](https://statistiques-locales.insee.fr/#c=indicator&i=filo_c1km.niveau_vie_moyen&s=2019&t=A01&view=map15)
+
+:::
+
+::: {.column width="50%"}
+
+<center>de **200m**</center>
+[![https://www.geoportail.gouv.fr](images/geoportail.png)](https://www.geoportail.gouv.fr/thematiques/economie-et-statistique)
+
+
+:::
+
+::::
+
+
+## Titre transparent {.backgroundStandard .unnamed .unnumbered .transparent}
+
+
+::: enteteAvecTitre
+Variables mises à disposition
+:::
+
+- Légèrement **différentes** que pour les autres zonages (additives) 
+
+  * Revenu médian ➡️ Revenu moyen = Somme des niveaux de vie winsorisés / Nombre d'individus
+  * Taux de pauvreté ➡️ Part de ménages pauvres = Nombre de ménages pauvres / Nombre de ménages
+
+</br>
+
+- Balayent un **spectre plus large** que la seule thématique de la pauvreté
+
+  * Ancienneté des logements
+  * Composition des ménages
+  * ...
+
+## Titre transparent {.backgroundStandard .unnamed .unnumbered .transparent}
+
+::: enteteAvecTitre
+Interprétation des cartes
+:::
+
+- Les carreaux permettent de s’**abstraire des zonages administratifs** tels que la commune
+
+- Le prix à payer pour ce niveau de finesse d'information est la **gestion du secret statistique**.
+
+_79 % des carreaux habités de France métropolitaine comprennent moins de 11 ménages fiscaux et doivent faire l’objet d’une imputation._
+
+</br>
+
+ ➡️  C’est pourquoi les données carroyées ne s’apprécient pas « carreau » par « carreau » mais sur un **paysage de carreaux** permettant, par exemple, d’identifier des poches de pauvreté au sein des villes. 
+
+## Titre transparent {.backgroundStandard .unnamed .unnumbered .transparent}
+
+[**Exercice 3**](..\travaux-pratiques\index.html#manipuler-les-données-carroyées-de-filosofi)
+
+**Objectif** : Réaliser la carte suivante du **revenu moyen** par **carreau de 1km** en Seine-Saint-Denis (93), en mobilisant les données de Filosofi.
+
+
+![](..\travaux-pratiques\index_files\figure-html\carte_exo_2-1.png){fig-align="center"}
