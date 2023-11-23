@@ -1,5 +1,6 @@
 # Atelier Insee "Filosofi" à destination des datajournalistes
 
+
 _Auteurs : Kim Antunez, Solène Colin et Mathilde Gerardin (DG Insee/DDAR/DAR)_
 
 Liens vers les présentations :
