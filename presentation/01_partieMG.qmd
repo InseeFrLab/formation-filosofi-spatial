@@ -1,0 +1,229 @@
+# Comment mesurer la pauvreté ? {#chapters_1 .backgroundTitre}
+
+## Qu'est-ce que la pauvreté ? {#section_1_1 .backgroundStandard}
+
+::: enteteAvecTitre
+Pour commencer...
+:::
+
+Avoir un faible revenu, percevoir des minima sociaux, ne pas avoir de logement, se priver de certaines dépenses, recourir à l'aide alimentaire...
+
+➡️ la pauvreté est un phénomène **multidimensionnel**
+
+. . .
+
+</br>
+
+Parmi elles, deux dimensions sont mesurées régulièrement par la statistique publique :
+
+-   La **pauvreté monétaire**
+    -   une mesure relative basée sur les revenus, qui compare le *niveau de vie* par rapport au *seuil de pauvreté*
+-   La **pauvreté en conditions de vie**
+    -   traduit l'incapacité à couvrir les dépenses de la vie courante pour avoir un niveau de vie acceptable
+
+::: {.callout-tip icon="false"}
+# Dans cet atelier, focus sur la **pauvreté** [**monétaire, au niveau local**]{.underline}
+
+*Objectif* : appréhender les différences de revenus entre les territoires
+:::
+
+## La pauvreté monétaire {#section_1_2 .backgroundStandard}
+
+Une mesure relative déterminée à partir du **seuil de pauvreté** = 60% du niveau de vie médian
+
+::: {.callout-note collapse="false"}
+## Définition de la **pauvreté monétaire**
+
+Une personne est pauvre lorsqu'elle vit dans un **ménage dont le niveau de vie est inférieur au seuil de pauvreté**, fixé à 60 % du niveau de vie médian de la population. *En 2021, 14,5% des personnes sont pauvres en France*
+:::
+
+. . .
+
+::: {.callout-note collapse="false"}
+## Définition du **niveau de vie**
+
+Le **niveau de vie** d'un ménage est son **revenu disponible** *(= revenu après redistribution, à la disposition du ménage pour consommer et épargner)* divisé par le nombre d'**unités de consommation** (UC). Le niveau de vie est donc le même pour tous les individus d'un même ménage.\
+*Échelle d'équivalence de l'OCDE* : 1 UC au premier adulte du ménage, 0,5 UC aux autres personnes de 14 ans ou plus et 0,3 UC aux enfants de moins de 14 ans.
+:::
+
+. . . 
+
+2 sources principales :
+
+- [au niveau national]{.underline} : l'**Enquête Revenus Fiscaux et Sociaux** (ERFS) permet de disposer de la distribution complète des revenus (appariement enquête emploi et revenus)\
+- [au niveau local]{.underline} : le dispositif **Filosofi**, construit à partir des sources socio-fiscales : une source quasi-exhaustive disponible à un niveau territorial très fin et adaptée pour les comparaisons entre territoires
+
+# À la découverte des données spatiales de revenus {#chapters_2 .backgroundTitre}
+
+## Focus sur le dispositif *Filosofi* {#section_2_1 .backgroundStandard}
+
+-   Des indicateurs clés :
+
+    -   Distribution du **niveau de vie** (médiane, D1, D9...), **taux de pauvreté**\
+    -   Décomposition du revenu disponible (part des salaires, des retraites, des prestations sociales...)\
+    -   ... croisés avec des **caractéristiques sociodémographiques** (âge, le statut d'occupation du logement...)
+
+. . .
+
+-   Diffusés sur le champ de la **France métropolitaine + Martinique + La Réunion**\
+
+    -   Pour la Guadeloupe, la Guyane et Mayotte c'est l'enquête *Budget de famille* qui est utilisée pour produire des indicateurs de revenus et de pauvreté.
+
+. . .
+
+-   Sur de **nombreux niveaux géographiques** :
+
+    -   Niveaux administratifs : de la région à la commune *(sous réserve du respect du secret statistique - voir plus loin)*\
+    -   Zonages d'études de l'Insee : zones d'emploi, aires d'attraction des villes...\
+    -   Et aussi : données à l'Iris, données sur les QPV, **données carroyées**
+
+. . .
+
+-   Calendrier (hors données carroyées) : diffusion des données du millésime *N* (= revenus de l'année *N*) à partir de janvier *N+3*
+
+## Première approche sur le site **Statistiques locales** {#section_2_2 .backgroundStandard}
+
+::: enteteAvecTitre
+Où trouver les données ? (1/2)
+:::
+
+<https://statistiques-locales.insee.fr>
+
+-   Sur la page d'accueil, cliquer sur *Indicateurs*\
+-   Dans le panneau de gauche, choisir l'indicateur du **Taux de pauvreté 2020** (*Revenus - Pouvoir d'achat - consommation* \> *Pauvreté - Précarité*)\
+-   Toujours dans le panneau de gauche, vous pouvez choisir le *niveau géographique* sur lequel cartographier les données
+
+
+## Titre transparent {.backgroundStandard .unnamed .unnumbered .transparent}
+
+::: enteteAvecTitre 
+Où trouver les données ? (1/2)
+:::
+
+**Exercice 1 **
+
+::: {.callout-warning icon="false"}
+# Questions
+
+**1**. Quel est le département de France Métropolitaine avec le taux de pauvreté le plus faible ? le plus élevé ?\
+
+**2**. Parmi les intercommunalités de + 300 000 habitants, quelle est celle qui a le taux de pauvreté le plus élevé ?
+:::
+
+. . .
+
+::: {.callout-tip collapse="true"}
+## Indices
+
+-   Vous pouvez représenter plusieurs variables sur la même carte.\
+
+-   Vous pouvez afficher le tableau des données en parallèle de la carte en cliquant sur le bouton **+** à côté de `CARTE` au-dessus de la carte, puis sur `CARTE + TABLEAU`. Cliquer sur les colonnes du tableau permet de les trier. À droite, le bouton `ACTIONS` propose une fonctionnalité de tri sur les différentes variables affichées.
+:::
+
+
+## Titre transparent {.backgroundStandard .unnamed .unnumbered .transparent}
+
+
+::: enteteAvecTitre
+Où trouver les données ? (1/2)
+:::
+
+::: {.callout-caution collapse="true"}
+## Solutions
+
+**1**. Le département de France métropolitaine avec le taux de pauvreté :\
+- le plus **faible** : 85 - **Vendée** (8.9%)\
+- le plus **élevé** : 93 - **Seine-Saint-Denis** (27.6%)\
+
+**2**. L'intercommunalité de 300 000 habitants ou plus avec le taux de pauvreté le plus élevé est la **Communauté d'Agglomération de Roissy Pays de France** (22.8%)
+:::
+
+::: callout-note
+## *À savoir*
+
+Le site [*Statistiques locales*](https://statistiques-locales.insee.fr) offre de nombreuses fonctionnalités : paramétrage des cartes, export des données, comparaison de territoires, édition de rapports... voir le [mode d'emploi simplifié](https://www.insee.fr/fr/statistiques/fichier/3544265/mode_emploi_statistiques_locales_simplifie.pdf) pour en savoir plus.
+:::
+
+## Fichiers détaillés téléchargeables sur [insee.fr](https://www.insee.fr/fr/accueil) {.backgroundStandard}
+
+::: enteteAvecTitre
+Où trouver les données ? (2/2)
+:::
+
+**Niveaux communaux et supracommunaux**
+
+-   [*Principaux résultats sur les revenus et la pauvreté des ménages en 2020*](https://www.insee.fr/fr/statistiques/6692392?sommaire=6692394)\
+    -   Une publication + un fichier à télécharger (csv ou xlsx) pour tous les niveaux géographiques\
+    -   Davantage de variables et de niveaux géographiques que sur *Statistiques Locales* (géographie au 01/01/2023)
+-   [*Structure et distribution des revenus, inégalité des niveaux de vie en 2020*](https://www.insee.fr/fr/statistiques/6692220)\
+    -   Indicateurs très détaillés sur les revenus déclarés (avant redistribution), les revenus disponibles (après redistribution) et les niveaux de vie\
+    -   1 fichier par champ d'analyse x sous population x niveau géographique (géographie au 01/01/2021)\
+        -   *Par exemple :* le niveau de vie médian des femmes pauvres occupant seules leur logement en Provence-Alpes-Côte-d'Azur ? 
+        -   *Réponse : 10 790€ annuels en 2020*
+        
+        
+::: callout-note
+
+Un de ces nombreux fichiers, nommé `cc_filosofi_2020_COM.csv` vous servira durant l'[**Exercice 2 **](..\travaux-pratiques\index.html#carte-communale-du-taux-de-pauvreté-en-bretagne) de cartographie sur R.
+
+:::
+   
+## Titre transparent {.backgroundStandard .unnamed .unnumbered .transparent}
+
+
+**Niveaux infracommunaux**
+
+-   [Bases à l'**IRIS**](https://www.insee.fr/fr/statistiques/7233950)\
+
+    -   Sur les IRIS des communes d'au moins 5000 habitants
+
+-   [Données sur les **quartiers de la politique de la ville**](https://www.insee.fr/fr/statistiques/7231733?sommaire=2500477)
+
+-   [**Données carroyées** (Filosofi 2019)](https://www.insee.fr/fr/statistiques/7655515)
+
+::: {.callout-warning collapse="false"}
+## *À savoir*
+
+Pour retrouver ces pages, utiliser la barre de recherche sur insee.fr et saisir `filosofi` !
+:::
+
+
+## Quelques précautions avec Filosofi {.backgroundStandard}
+
+<!-- *(à voir à quel moment mettre ce slide)* -->
+
+::: callout-warning
+## Limites de la source
+
+-   **La mesure du revenu dans Filosofi est incomplète** : certains revenus, notamment ceux exonérés d'impôts (prime exceptionnelle de pouvoir d'achat, prime Covid versées aux personnels soignants etc.) peuvent manquer certaines années.
+
+-   **Le degré de couverture de la population peut varier d'une année sur l'autre**.
+:::
+
+::: {.callout-tip icon="false"}
+## Conséquences
+
+-   L'utilisation de Filosofi est centrée sur les **comparaisons entre territoires**.
+
+-   Filosofi est à utiliser en **statique** : les évolutions peuvent ne pas représenter des variations de revenus mais des changements dans le degré de couverture des revenus ou de la population.
+:::
+
+::: callout-note
+## Quelques références
+
+-   [*L'Essentiel sur...la pauvreté*](https://www.insee.fr/fr/statistiques/5759045#onglet-1)\
+-   [*Le Tableau de Bord de l'Économie française*](https://www.insee.fr/fr/outil-interactif/5367857/territoires/30_RPC/33_PAU)\
+-   [*Pauvreté et territoires : davantage de jeunes et de locataires du parc social dans les grandes villes, plus de retraités parmi les pauvres dans le rural*](https://www.insee.fr/fr/information/7676709) : une publication nationale + un dossier pour chaque région
+:::
+
+## Titre transparent {.backgroundStandard .unnamed .unnumbered .transparent}
+
+
+[**Exercice 2 **](..\travaux-pratiques\index.html#carte-communale-du-taux-de-pauvreté-en-bretagne)
+
+**Objectif** : Réaliser la carte suivante du **niveau de vie** par **commune** en Normandie, en mobilisant les données de Filosofi.
+
+
+![](..\travaux-pratiques\index_files\figure-html\carte_exo_1-1.png){fig-align="center"}
+
+

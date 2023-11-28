@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr" xml:lang="fr"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Kim Antunez, Solène Colin, Mathilde Gerardin">
+
+<title>Comment manipuler et faire parler les données spatiales de revenus diffusées par l’Insee ?</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="index_files/libs/clipboard/clipboard.min.js"></script>
+<script src="index_files/libs/quarto-html/quarto.js"></script>
+<script src="index_files/libs/quarto-html/popper.min.js"></script>
+<script src="index_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="index_files/libs/quarto-html/anchor.min.js"></script>
+<link href="index_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="index_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="index_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="index_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="index_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table des matières</h2>
+   
+  <ul class="collapse">
+  <li><a href="#exercice-2-carte-communale-du-taux-de-pauvreté-en-bretagne" id="toc-exercice-2-carte-communale-du-taux-de-pauvreté-en-bretagne" class="nav-link active" data-scroll-target="#exercice-2-carte-communale-du-taux-de-pauvreté-en-bretagne">Exercice 2 : Carte communale du taux de pauvreté en Bretagne</a>
+  <ul class="collapse">
+  <li><a href="#chargement-des-données" id="toc-chargement-des-données" class="nav-link" data-scroll-target="#chargement-des-données">Chargement des données</a></li>
+  <li><a href="#traitement-des-données" id="toc-traitement-des-données" class="nav-link" data-scroll-target="#traitement-des-données">Traitement des données</a></li>
+  </ul></li>
+  <li><a href="#exercice-3-manipuler-les-données-carroyées-de-filosofi" id="toc-exercice-3-manipuler-les-données-carroyées-de-filosofi" class="nav-link" data-scroll-target="#exercice-3-manipuler-les-données-carroyées-de-filosofi">Exercice 3 : Manipuler les données carroyées de Filosofi</a></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Comment manipuler et faire parler les données spatiales de revenus diffusées par l’Insee ?</h1>
+<p class="subtitle lead">Travaux pratiques</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Auteurs</div>
+    <div class="quarto-title-meta-contents">
+             <p>Kim Antunez, Solène Colin, Mathilde Gerardin </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="exercice-2-carte-communale-du-taux-de-pauvreté-en-bretagne" class="level1">
+<h1>Exercice 2 : Carte communale du taux de pauvreté en Bretagne</h1>
+<!-- Chargement des data -->
+<!-- Tidy data -->
+<p>Nous cherchons ici à réaliser la carte suivante du <strong>taux de pauvreté par commune en Bretagne</strong>, en mobilisant les données de Filosofi.</p>
+<!-- Carto -->
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/carte_taux_pauv-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Millésimes des données et fonds de carte
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<ul>
+<li><p>Le millésime le plus récent disponible du dispositif Filosofi est <code>2020</code>.</p></li>
+<li><p>Les données utilisées ici sont en « géographie récente ». Cela signifie que les communes correspondent aux limites en vigueur au 1er janvier de l’année de la sortie des données, à savoir <code>2023</code>.</p></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Données
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>Les données nécessaires à la création de cette carte sont les suivantes :</p>
+<ul>
+<li><p>les données de Filosofi des communes, hébergées sur le <a href="https://www.insee.fr/fr/statistiques/6692392?sommaire=6692394">site de l’Insee</a>, également téléchargeables directement à <a href="https://minio.lab.sspcloud.fr/kantunez/diffusion/datajournaliste/cc_filosofi_2020_COM.csv">ce lien</a> :</p></li>
+<li><p>un fond de carte communal, par exemple la source <a href="https://geoservices.ign.fr/adminexpress">Admin Express de l’IGN</a>, également téléchargeables directement à <a href="https://minio.lab.sspcloud.fr/kantunez/diffusion/datajournaliste/commune_francemetro_2023.gpkg">ce lien</a></p></li>
+</ul>
+</div>
+</div>
+</div>
+<section id="chargement-des-données" class="level2">
+<h2 class="anchored" data-anchor-id="chargement-des-données">Chargement des données</h2>
+<p>La première étape consiste à charger les données.</p>
+<section id="chargement-du-fond-de-carte" class="level3">
+<h3 class="anchored" data-anchor-id="chargement-du-fond-de-carte">Chargement du fond de carte</h3>
+<p>Le fond de carte est au format géographique <code>.gpkg</code>.</p>
+<p>On le charge dans R en conservant uniquement le code commune (variable <code>code</code>).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>repertoire <span class="ot">&lt;-</span> <span class="st">"https://minio.lab.sspcloud.fr/kantunez/diffusion/datajournaliste/"</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>fond_com <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="fu">paste0</span>(repertoire, <span class="st">"commune_francemetro_2023.gpkg"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(code)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>On fait un aperçu des premières lignes. Une colonne <code>geometry</code> est renseignée pour chaque ligne. Cela correspond à la “géométrie” de chaque commune : ce qui permet de tracer les contours communaux.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(fond_com)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Simple feature collection with 6 features and 1 field
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: 378764 ymin: 6257683 xmax: 921107 ymax: 7069489
+Projected CRS: RGF93 v1 / Lambert-93
+   code                       geometry
+1 25383 MULTIPOLYGON (((917682 6692...
+2 33544 MULTIPOLYGON (((378764 6500...
+3 34074 MULTIPOLYGON (((697366 6265...
+4 37002 MULTIPOLYGON (((503920 6706...
+5 59415 MULTIPOLYGON (((730611 7013...
+6 59416 MULTIPOLYGON (((662028 7066...</code></pre>
+</div>
+</div>
+</section>
+<section id="chargement-des-données-de-pauvreté-par-commune" class="level3">
+<h3 class="anchored" data-anchor-id="chargement-des-données-de-pauvreté-par-commune">Chargement des données de pauvreté par commune</h3>
+<p>Les données communales sont au format <code>.csv</code>.</p>
+<p>On les charge dans R.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>data_com <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="at">file =</span> <span class="fu">paste0</span>(repertoire, <span class="st">"cc_filosofi_2020_COM.csv"</span>), <span class="at">sep =</span> <span class="st">";"</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>On peut regarder à quoi la table ressemble grâce à l’instruction <code>head(data_com)</code></p>
+<pre><code>  CODGEO NBMENFISC20 NBPERSMENFISC20 MED20 PIMP20 TP6020 TP60AGE120 TP60AGE220 TP60AGE320 TP60AGE420
+1  01001         331             842 24820      s      s          s          s          s          s
+2  01002         116             264 23220      s      s          s          s          s          s
+3  01004        6882           15358 21070   48,0   17,0       24,0       22,0       18,0       16,0
+4  01005         767            1939 24380      s      s          s          s          s          s
+5  01006           s               s     s      s      s          s          s          s          s
+6  01007        1192            2888 24330   57,0    7,0          s          s          s          s
+  TP60AGE520 TP60AGE620 TP60TOL120 TP60TOL220 PACT20 PTSA20 PCHO20 PBEN20 PPEN20 PPAT20 PPSOC20 PPFAM20
+1          s          s          s          s      s      s      s      s      s      s       s       s
+2          s          s          s          s      s      s      s      s      s      s       s       s
+3       11,0          s        5,0       27,0   72,2   65,4    3,5    3,3   26,1    8,0     8,2     2,9
+4          s          s          s          s      s      s      s      s      s      s       s       s
+5          s          s          s          s      s      s      s      s      s      s       s       s
+6          s          s          s          s   76,1   70,8    2,6    2,7   26,3    7,2     4,8     2,3
+  PPMINI20 PPLOGT20 PIMPOT20  D120  D920 RD20
+1        s        s        s     s     s    s
+2        s        s        s     s     s    s
+3      3,6      1,7    -14,5 11490 35550  3,1
+4        s        s        s     s     s    s
+5        s        s        s     s     s    s
+6      1,7      0,8    -14,4 14430 37340  2,6</code></pre>
+</section>
+</section>
+<section id="traitement-des-données" class="level2">
+<h2 class="anchored" data-anchor-id="traitement-des-données">Traitement des données</h2>
+<section id="nettoyage-des-données-et-fusion-des-tables" class="level3">
+<h3 class="anchored" data-anchor-id="nettoyage-des-données-et-fusion-des-tables">Nettoyage des données et fusion des tables</h3>
+<p>On fait les traitements supplémentaires suivants :</p>
+<ol type="1">
+<li>On va sélectionner uniquement les <strong>variables d’intérêt</strong> à savoir :</li>
+</ol>
+<ul>
+<li>le code de la commune <code>CODGEO</code> ;</li>
+<li>le taux de pauvreté à 60 % pour l’année 2020 appelé <code>TP6020</code>.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>data_tx_pauv <span class="ot">&lt;-</span> data_com <span class="sc">%&gt;%</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="at">code =</span> CODGEO, TP6020)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="2" type="1">
+<li>Pour certaines communes, le taux de pauvreté prend les valeurs</li>
+</ol>
+<ul>
+<li><code>s</code> (secret statistique)</li>
+<li><code>nd</code> (non défini, pour les communes de très petites tailles)</li>
+</ul>
+<p>On <strong>remplace ces valeurs</strong> par la valeur NA de R qui correspond aux valeurs manquantes.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>data_tx_pauv <span class="ot">&lt;-</span> data_tx_pauv <span class="sc">%&gt;%</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">TP6020 =</span> <span class="fu">ifelse</span>(TP6020 <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"s"</span>, <span class="st">"nd"</span>), <span class="cn">NA</span>, TP6020))</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="3" type="1">
+<li>On remplace les virgules par des points (le logiciel R interprète le point comme séparateur décimal)</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>data_tx_pauv <span class="ot">&lt;-</span> data_tx_pauv <span class="sc">%&gt;%</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">TP6020 =</span> <span class="fu">str_replace</span>(TP6020, <span class="at">pattern =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">,"</span>, <span class="at">replacement =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">."</span>))</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="4" type="1">
+<li>Une fois les virgules remplacées, on convertit la variable transformée au <strong>format numérique</strong></li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>data_tx_pauv <span class="ot">&lt;-</span> data_tx_pauv <span class="sc">%&gt;%</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">TP6020 =</span> <span class="fu">as.numeric</span>(TP6020))</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="5" type="1">
+<li>On <strong>fusionne la table Filosofi avec le fond de carte</strong>.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>carte_tx_pauv <span class="ot">&lt;-</span> fond_com <span class="sc">%&gt;%</span> </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(data_tx_pauv)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="6" type="1">
+<li>On se focalise par exemple sur la <strong>Bretagne</strong> (on sélectionne les 4 départements de la région)</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>carte_tx_pauv <span class="ot">&lt;-</span> carte_tx_pauv <span class="sc">%&gt;%</span> </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">str_sub</span>(code, <span class="dv">1</span>, <span class="dv">2</span>) <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"22"</span>, <span class="st">"29"</span>, <span class="st">"35"</span>, <span class="st">"56"</span>))</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="carte" class="level3">
+<h3 class="anchored" data-anchor-id="carte">Carte</h3>
+<p>Voici comment tracer la carte :</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mf_choro</span>(carte_tx_pauv, <span class="at">var =</span> <span class="st">"TP6020"</span>, <span class="at">col_na =</span> <span class="st">"grey"</span>, </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">leg_title =</span> <span class="st">"Taux de pauvreté</span><span class="sc">\n</span><span class="st"> en Bretagne"</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>On précise :</p>
+<ul>
+<li>la variable à cartographier (<code>var = "TP6020"</code>)</li>
+<li>le fait que les valeurs <code>NA</code> seront affichées en gris (<code>col_na = "grey"</code>)</li>
+<li>le titre de la légende <code>leg_title = "Taux de pauvreté\n en Bretagne"</code></li>
+</ul>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercice 1
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>En repartant du même jeu de données, réaliser cette nouvelle carte du niveau de vie focalisée sur la Normandie.</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/carte_exo_1-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Indice 1
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Utilisez la variable <code>MED20</code>.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Indice 2
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Pensez à bien corriger la variable pour la transformer en variable numérique</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Indice 3
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Les codes des départements Normands sont les suivants : 14, 27, 50, 61, 76.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>data_niv_vie <span class="ot">&lt;-</span> data_com <span class="sc">%&gt;%</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="at">code =</span> CODGEO, MED20) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">MED20 =</span> <span class="fu">ifelse</span>(MED20 <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"s"</span>, <span class="st">"nd"</span>), <span class="cn">NA</span>, MED20),</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">MED20 =</span> <span class="fu">as.numeric</span>(MED20)) </span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>carte_niv_vie <span class="ot">&lt;-</span> fond_com <span class="sc">%&gt;%</span> </span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(data_niv_vie) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">str_sub</span>(code, <span class="dv">1</span>, <span class="dv">2</span>) <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"14"</span>, <span class="st">"27"</span>, <span class="st">"50"</span>, <span class="st">"61"</span>, <span class="st">"76"</span>))</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="fu">mf_choro</span>(carte_niv_vie, <span class="at">var =</span> <span class="st">"MED20"</span>, <span class="at">col_na =</span> <span class="st">"grey"</span>,</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>         <span class="at">leg_title =</span> <span class="st">"Niveau de vie</span><span class="sc">\n</span><span class="st"> en Normandie"</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="exercice-3-manipuler-les-données-carroyées-de-filosofi" class="level1">
+<h1>Exercice 3 : Manipuler les données carroyées de Filosofi</h1>
+<p>Pour la seconde application, on s’intéresse aux <strong>données carroyées</strong> Filosofi.</p>
+<p>Ces données sont disponibles sur des carreaux de 200 mètres et d’1 kilomètre.</p>
+<p>Pour simplifier le chargement, on utilise ici les carreaux de 1 km.</p>
+<p>Plusieurs variables sont calculées sur ces carreaux, les données et la liste de variables sont disponibles <a href="https://www.insee.fr/fr/statistiques/7655464?sommaire=7655515#dictionnaire">sur le site de l’Insee</a>.</p>
+<ol type="1">
+<li>On charge les données par carreau.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>carreaux <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="fu">paste0</span>(repertoire, <span class="st">"carreaux_1km_met.gpkg"</span>))</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Reading layer `carreaux_1km_met' from data source 
+  `https://minio.lab.sspcloud.fr/kantunez/diffusion/datajournaliste/carreaux_1km_met.gpkg' 
+  using driver `GPKG'
+Simple feature collection with 374027 features and 31 fields
+Geometry type: POLYGON
+Dimension:     XY
+Bounding box:  xmin: 99435.76 ymin: 6048791 xmax: 1242694 ymax: 7110351
+Projected CRS: RGF93 v1 / Lambert-93</code></pre>
+</div>
+</div>
+<ol start="2" type="1">
+<li>On sélectionne quelques variables d’intérêt</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(carreaux)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "idcar_1km" "i_est_1km" "lcog_geo"  "ind"       "men"       "men_pauv" 
+ [7] "men_1ind"  "men_5ind"  "men_prop"  "men_fmp"   "ind_snv"   "men_surf" 
+[13] "men_coll"  "men_mais"  "log_av45"  "log_45_70" "log_70_90" "log_ap90" 
+[19] "log_inc"   "log_soc"   "ind_0_3"   "ind_4_5"   "ind_6_10"  "ind_11_17"
+[25] "ind_18_24" "ind_25_39" "ind_40_54" "ind_55_64" "ind_65_79" "ind_80p"  
+[31] "ind_inc"   "geom"     </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>listeIndic <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"idcar_1km"</span>, <span class="co">#identifiant du carreau de 1km</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>                <span class="st">"lcog_geo"</span>, <span class="co">#liste des communes qui l'intersectent</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>                <span class="st">"ind"</span>, <span class="co"># Nombre d'individus du carreau</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>                <span class="st">"men"</span>, <span class="co">#Nombre de ménages du carreau</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>                <span class="st">"ind_snv"</span> <span class="co">#Somme des niveaux de vie winsorisés des individus </span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>                )</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>carreaux <span class="ot">&lt;-</span> carreaux <span class="sc">%&gt;%</span> </span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">all_of</span>(listeIndic))</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="3" type="1">
+<li>On regarde les premières lignes.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(carreaux)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Simple feature collection with 6 features and 5 fields
+Geometry type: POLYGON
+Dimension:     XY
+Bounding box:  xmin: 1217861 ymin: 6048791 xmax: 1221929 ymax: 6051153
+Projected CRS: RGF93 v1 / Lambert-93
+                        idcar_1km lcog_geo  ind men  ind_snv
+1 CRS3035RES1000mN2029000E4252000    2A041  3.0 1.4  84270.6
+2 CRS3035RES1000mN2029000E4254000    2A041  2.0 0.9  56180.4
+3 CRS3035RES1000mN2030000E4252000    2A041  6.0 2.5 144146.0
+4 CRS3035RES1000mN2030000E4253000    2A041 16.5 6.9 396401.6
+5 CRS3035RES1000mN2030000E4254000    2A041  5.0 2.4 140451.0
+6 CRS3035RES1000mN2030000E4255000    2A041  9.0 4.1 252811.8
+                            geom
+1 POLYGON ((1218038 6048791, ...
+2 POLYGON ((1220028 6048969, ...
+3 POLYGON ((1217950 6049794, ...
+4 POLYGON ((1218944 6049883, ...
+5 POLYGON ((1219939 6049972, ...
+6 POLYGON ((1220934 6050061, ...</code></pre>
+</div>
+</div>
+<p>On retrouve bien nos différentes variables, ainsi que la colonne de géométrie. On a ainsi, dans un seul fichier, à la fois des informations (valeurs de certains indicateurs pour chaque carreaux) mais aussi de quoi tracer ces carreaux.</p>
+<ol start="4" type="1">
+<li>Pour créer une carte sur le territoire qui nous intéresse, on peut ne conserver qu’une liste de communes grâce à la variable <code>lcog_geo</code>. Par exemple, on ne conserve ici que les carreaux qui intersectent l’une des 4 communes des Hauts-de-Seine suivantes : Montrouge (code géographique 92049), Malakoff (92046), Châtillon (92020) et Bagneux (92007) :</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>liste_depcom <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"92049"</span>, <span class="st">"92046"</span>, <span class="st">"92020"</span>, <span class="st">"92007"</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a> <span class="co"># écrire le code géographique de la commune, et pas son code postal</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>position <span class="ot">&lt;-</span> <span class="fu">strsplit</span>(carreaux<span class="sc">$</span>lcog_geo,<span class="st">'(?&lt;=.{5})'</span>, <span class="at">perl=</span><span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lapply</span>(<span class="cf">function</span>(x) <span class="fu">any</span>(x<span class="sc">%in%</span> liste_depcom)) <span class="sc">%&gt;%</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unlist</span>()</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>carreaux_select <span class="ot">&lt;-</span> carreaux[position,]</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="5" type="1">
+<li>On affiche les carreaux concernés</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mf_base</span>(carreaux_select)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/carte_car_brute-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<ol start="6" type="1">
+<li>On cartographie le nombre de ménages par carreau :</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mf_choro</span>(carreaux_select, <span class="at">var =</span> <span class="st">"men"</span>, <span class="at">col_na =</span> <span class="st">"grey"</span>,</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">leg_title =</span> <span class="st">"Nombre de ménages"</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/carte_car_var-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<ol start="7" type="1">
+<li>On agrège les données sur la zone définie (l’ensemble des carreaux qui intersectent les communes indiquées).</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>agregats <span class="ot">&lt;-</span> carreaux_select <span class="sc">%&gt;%</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_set_geometry</span>(<span class="cn">NULL</span>) <span class="sc">%&gt;%</span> <span class="co"># Suppression de la colonne géométrie devenue inutile</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>idcar_1km, <span class="sc">-</span>lcog_geo) <span class="sc">%&gt;%</span> <span class="co"># Suppression des colonnes qui ne sont pas à sommer</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise_all</span>(sum) <span class="co"># Somme de tous les indicateurs</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(agregats)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     ind    men    ind_snv
+1 268572 122229 7781599957</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Privilégier les sources et mailles géographiques adaptées à votre besoin
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<ul>
+<li><p>Si vous vous intéressez simplement à compter les ménages ou les individus à des niveaux supracommunaux, utilisez directement les données communales du <strong>recensement de la population</strong>, elles sont faite pour cela !</p></li>
+<li><p>Les données carroyées de Filosofi peuvent vous servir dans le cas où vous vous intéressez à des <strong>territoires infracommunaux</strong> ou à des <strong>petites communes</strong> dont les indicateurs ont été blanchis afin de respecter le secret statistique.</p></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercice 3 - Question 1
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Cartographier le <strong>revenu moyen</strong> par carreau de 1 km dans l’ensemble du département de <strong>Seine-Saint-Denis</strong> (93).</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/carte_exo_2-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Indice
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Vous pouvez extraire les 2 premiers caractères des codes communes pour identifier celles concernées par un département.</p>
+<p>C’est possible par exemple grâce à la création de l’objet “position”, dans la fonction lapply : <code>lapply(function(x) any(str_sub(x, 1, 2) == "93"))</code></p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># identification des carreaux qui intersectent une commune de la Seine-Saint-Denis (département 93)</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>position <span class="ot">&lt;-</span> <span class="fu">strsplit</span>(carreaux<span class="sc">$</span>lcog_geo,<span class="st">'(?&lt;=.{5})'</span>, <span class="at">perl=</span><span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lapply</span>(<span class="cf">function</span>(x) <span class="fu">any</span>(<span class="fu">str_sub</span>(x, <span class="dv">1</span>, <span class="dv">2</span>) <span class="sc">==</span> <span class="st">"93"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unlist</span>()</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="co"># extraction de ces carreaux</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>carreaux_select_dep <span class="ot">&lt;-</span> carreaux[position,] <span class="sc">%&gt;%</span> </span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rev_moy =</span> ind_snv<span class="sc">/</span>ind)</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a><span class="co"># tracé de la carte</span></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a><span class="fu">mf_choro</span>(carreaux_select_dep, <span class="at">var =</span> <span class="st">"rev_moy"</span>, <span class="at">col_na =</span> <span class="st">"grey"</span>, <span class="at">border=</span><span class="cn">NA</span>,</span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">leg_title =</span> <span class="st">"Revenu moyen</span><span class="sc">\n</span><span class="st"> par carreau"</span>, <span class="at">leg_val_rnd =</span> <span class="sc">-</span><span class="dv">2</span>)</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a><span class="fu">mf_map</span>(fond_com <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="fu">substr</span>(code,<span class="dv">1</span>,<span class="dv">2</span>)<span class="sc">==</span><span class="st">"93"</span>), <span class="at">col=</span><span class="cn">NA</span>, <span class="at">add=</span><span class="cn">TRUE</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercice 3 - Question 2
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Quel est le revenu moyen sur l’ensemble des ménages des carreaux du département ?</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>agregats_dep <span class="ot">&lt;-</span> carreaux_select_dep <span class="sc">%&gt;%</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_set_geometry</span>(<span class="cn">NULL</span>) <span class="sc">%&gt;%</span> <span class="co"># Suppression de la colonne géométrie devenue inutile</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>idcar_1km, <span class="sc">-</span>lcog_geo) <span class="sc">%&gt;%</span> <span class="co"># Suppression des colonnes qui ne sont pas à sommer</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise_all</span>(sum) <span class="sc">%&gt;%</span> <span class="co"># Somme de tous les indicateurs</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rev_moy =</span> ind_snv <span class="sc">/</span> ind) <span class="sc">%&gt;%</span> </span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(rev_moy)</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste0</span>(<span class="fu">round</span>(agregats_dep), <span class="st">" euros"</span>))</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "20469 euros"</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copié");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copié");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

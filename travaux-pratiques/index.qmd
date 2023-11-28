@@ -1,0 +1,455 @@
+---
+title: "Comment manipuler et faire parler les données spatiales de revenus diffusées par l’Insee ?"
+subtitle: "Travaux pratiques"
+lang: fr 
+author: "Kim Antunez, Solène Colin, Mathilde Gerardin"
+execute:
+  echo: true
+  eval: true
+  warning: true
+language:
+  title-block-author-single: Auteurs
+format:
+  html:
+    toc: true
+    toc-depth: 2
+    number-sections: false
+    theme: [default]
+---
+
+
+```{r installPackages, include=FALSE}
+## Liste des librairies utilisées
+packages <-  c("ggplot2", "mapsf", "dplyr", "stringr", "sf")
+
+## Vérifier si la librairie est installée, si non l'installer, puis la charger
+package.check <- lapply(
+  packages,
+  FUN = function(x) {
+    if (!require(x, character.only = TRUE)) {
+      install.packages(x, dependencies = TRUE)
+      library(x, character.only = TRUE)
+    }
+  }
+)
+
+```
+
+# Exercice 2 : Carte communale du taux de pauvreté en Bretagne
+
+<!-- Chargement des data -->
+
+```{r chargement_fond_aus, include = FALSE, eval = F}
+fond_com <- sf::st_read(dsn = "//pd_as_ge_d1_50/ge_data_pd/creacartes_pd/fichiers-ihm/2023/francemetro/commune_francemetro_2023.gpkg") %>% 
+  select(code)
+```
+
+```{r chargement_fond_enligne, include = FALSE, eval = T}
+repertoire <- "https://minio.lab.sspcloud.fr/kantunez/diffusion/datajournaliste/"
+fond_com <- sf::st_read(dsn = paste0(repertoire, "commune_francemetro_2023.gpkg")) %>%
+  select(code)
+```
+
+```{r chargementdata_aus, include = FALSE, eval = F}
+data_com <- read.csv(file = "V:/PSAR-AU/Saisines ponctuelles/2023/Atelier datajournalistes Filosofi/data/cc_filosofi_2020_COM.csv", sep = ";")
+```
+
+```{r chargementdata_enligne, include = FALSE, eval = T}
+data_com <- read.csv(file = paste0(repertoire, "cc_filosofi_2020_COM.csv"), sep = ";")
+```
+
+<!-- Tidy data -->
+
+```{r tidydata1, include = FALSE}
+data_tx_pauv <- data_com %>%
+  select(code = CODGEO, TP6020)
+```
+
+```{r tidydata2, include = FALSE}
+data_tx_pauv <- data_tx_pauv %>%
+  mutate(TP6020 = ifelse(TP6020 %in% c("s", "nd"), NA, TP6020))
+```
+
+```{r tidydata3, include = FALSE}
+data_tx_pauv <- data_tx_pauv %>%
+  mutate(TP6020 = str_replace(TP6020, pattern = "\\,", replacement = "\\."))
+```
+
+```{r tidydata4, include = FALSE}
+data_tx_pauv <- data_tx_pauv %>%
+  mutate(TP6020 = as.numeric(TP6020))
+```
+
+```{r tidydata5, include = FALSE}
+carte_tx_pauv <- fond_com %>% 
+  inner_join(data_tx_pauv)
+```
+
+```{r tidydata6, include = FALSE}
+carte_tx_pauv <- carte_tx_pauv %>% 
+  filter(str_sub(code, 1, 2) %in% c("22", "29", "35", "56"))
+```
+
+
+Nous cherchons ici à réaliser la carte suivante du **taux de pauvreté par commune en Bretagne**, en mobilisant les données de Filosofi.
+
+
+<!-- Carto -->
+
+```{r carte_taux_pauv, echo = FALSE}
+mf_choro(carte_tx_pauv, var = "TP6020", col_na = "grey", 
+         leg_title = "Taux de pauvreté\n en Bretagne")
+```
+
+::: {.callout-warning collapse="false"}
+## Millésimes des données et fonds de carte
+
+- Le millésime le plus récent disponible du dispositif Filosofi est `2020`.
+
+- Les données utilisées ici sont en « géographie récente ». Cela signifie que les communes correspondent aux limites en vigueur au 1er janvier de l’année de la sortie des données, à savoir `2023`.
+
+:::
+
+::: {.callout-note collapse="false"}
+## Données
+
+Les données nécessaires à la création de cette carte sont les suivantes :
+
+- les données de Filosofi des communes, hébergées sur le [site de l'Insee](https://www.insee.fr/fr/statistiques/6692392?sommaire=6692394), également téléchargeables directement à [ce lien](https://minio.lab.sspcloud.fr/kantunez/diffusion/datajournaliste/cc_filosofi_2020_COM.csv) : 
+
+- un fond de carte communal, par exemple la source [Admin Express de l'IGN](https://geoservices.ign.fr/adminexpress), également téléchargeables directement à [ce lien](https://minio.lab.sspcloud.fr/kantunez/diffusion/datajournaliste/commune_francemetro_2023.gpkg)
+
+
+:::
+
+## Chargement des données
+
+La première étape consiste à charger les données. 
+
+### Chargement du fond de carte
+
+Le fond de carte est au format géographique `.gpkg`. 
+
+On le charge dans R en conservant uniquement le code commune (variable `code`).
+
+```{r chargement_fond_enligne, eval=FALSE}
+```
+
+On fait un aperçu des premières lignes. Une colonne `geometry` est renseignée pour chaque ligne. Cela correspond à la "géométrie" de chaque commune : ce qui permet de tracer les contours communaux.
+
+```{r preview-fond}
+head(fond_com)
+```
+
+### Chargement des données de pauvreté par commune
+
+Les données communales sont au format `.csv`.
+
+On les charge dans R.  
+
+```{r chargementdata_enligne, eval = FALSE}
+```
+
+On peut regarder à quoi la table ressemble grâce à l'instruction `head(data_com)`
+
+```
+  CODGEO NBMENFISC20 NBPERSMENFISC20 MED20 PIMP20 TP6020 TP60AGE120 TP60AGE220 TP60AGE320 TP60AGE420
+1  01001         331             842 24820      s      s          s          s          s          s
+2  01002         116             264 23220      s      s          s          s          s          s
+3  01004        6882           15358 21070   48,0   17,0       24,0       22,0       18,0       16,0
+4  01005         767            1939 24380      s      s          s          s          s          s
+5  01006           s               s     s      s      s          s          s          s          s
+6  01007        1192            2888 24330   57,0    7,0          s          s          s          s
+  TP60AGE520 TP60AGE620 TP60TOL120 TP60TOL220 PACT20 PTSA20 PCHO20 PBEN20 PPEN20 PPAT20 PPSOC20 PPFAM20
+1          s          s          s          s      s      s      s      s      s      s       s       s
+2          s          s          s          s      s      s      s      s      s      s       s       s
+3       11,0          s        5,0       27,0   72,2   65,4    3,5    3,3   26,1    8,0     8,2     2,9
+4          s          s          s          s      s      s      s      s      s      s       s       s
+5          s          s          s          s      s      s      s      s      s      s       s       s
+6          s          s          s          s   76,1   70,8    2,6    2,7   26,3    7,2     4,8     2,3
+  PPMINI20 PPLOGT20 PIMPOT20  D120  D920 RD20
+1        s        s        s     s     s    s
+2        s        s        s     s     s    s
+3      3,6      1,7    -14,5 11490 35550  3,1
+4        s        s        s     s     s    s
+5        s        s        s     s     s    s
+6      1,7      0,8    -14,4 14430 37340  2,6
+```
+
+## Traitement des données
+
+### Nettoyage des données et fusion des tables
+
+On fait les traitements supplémentaires suivants : 
+
+
+1. On va sélectionner uniquement les **variables d'intérêt** à savoir :
+
+- le code de la commune `CODGEO` ;
+- le taux de pauvreté à 60 % pour l'année 2020 appelé `TP6020`.
+
+```{r tidydata1, eval = FALSE}
+```
+
+2. Pour certaines communes, le taux de pauvreté prend les valeurs
+
+-  `s` (secret statistique)
+- `nd` (non défini, pour les communes de très petites tailles)
+
+On **remplace ces valeurs** par la valeur `r NA` de R qui correspond aux valeurs manquantes.
+
+```{r tidydata2, eval = FALSE}
+```
+
+3. On remplace les virgules par des points (le logiciel R interprète le point comme séparateur décimal)
+
+```{r tidydata3, eval = FALSE}
+```
+
+4. Une fois les virgules remplacées, on convertit la variable transformée au **format numérique**
+
+```{r tidydata4, eval = FALSE}
+```
+
+5. On **fusionne la table Filosofi avec le fond de carte**. 
+
+```{r tidydata5, eval = FALSE}
+```
+
+6. On se focalise par exemple sur la **Bretagne** (on sélectionne les 4 départements de la région)
+
+```{r tidydata6, eval = FALSE}
+```
+
+
+### Carte
+
+Voici comment tracer la carte :
+
+```{r carte_taux_pauv, eval = FALSE}
+```
+
+
+On précise :
+
+- la variable à cartographier (`var = "TP6020"`)
+- le fait que les valeurs `NA` seront affichées en gris (`col_na = "grey"`)
+- le titre de la légende `leg_title = "Taux de pauvreté\n en Bretagne"`
+
+
+::: {.callout-note icon=false}
+## Exercice 1
+
+En repartant du même jeu de données, réaliser cette nouvelle carte du niveau de vie focalisée sur la Normandie.
+
+```{r carte_exo_1, echo=FALSE, message=FALSE, warning=FALSE}
+data_niv_vie <- data_com %>%
+  select(code = CODGEO, MED20) %>% 
+  mutate(MED20 = ifelse(MED20 %in% c("s", "nd"), NA, MED20),
+         MED20 = as.numeric(MED20)) 
+  
+carte_niv_vie <- fond_com %>% 
+  inner_join(data_niv_vie) %>% 
+  filter(str_sub(code, 1, 2) %in% c("14", "27", "50", "61", "76"))
+  
+mf_choro(carte_niv_vie, var = "MED20", col_na = "grey",
+         leg_title = "Niveau de vie\n en Normandie")
+
+```
+
+:::
+
+::: {.callout-tip collapse="true"}
+## Indice 1
+
+Utilisez la variable `MED20`.
+
+:::
+
+
+::: {.callout-tip collapse="true"}
+## Indice 2
+
+Pensez à bien corriger la variable pour la transformer en variable numérique
+
+:::
+
+::: {.callout-tip collapse="true"}
+## Indice 3
+
+Les codes des départements Normands sont les suivants : 14, 27, 50, 61, 76.
+
+:::
+
+
+:::: {.content-hidden when-profile="exosolout"}
+::: {.callout-caution collapse="true"}
+## Solution
+
+
+```{r carte_exo_1, eval=FALSE}
+```
+:::
+::::
+
+
+# Exercice 3 : Manipuler les données carroyées de Filosofi
+
+Pour la seconde application, on s'intéresse aux **données carroyées** Filosofi.
+
+Ces données sont disponibles sur des carreaux de 200 mètres et d'1 kilomètre.
+
+Pour simplifier le chargement, on utilise ici les carreaux de 1 km.
+
+Plusieurs variables sont calculées sur ces carreaux, les données et la liste de variables sont disponibles [sur le site de l'Insee](https://www.insee.fr/fr/statistiques/7655464?sommaire=7655515#dictionnaire).
+
+1. On charge les données par carreau.
+
+```{r data_carreaux2_aus, include = FALSE, eval = F}
+carreaux <- sf::st_read(dsn = "V:/PSAR-AU/Saisines ponctuelles/2023/Atelier datajournalistes Filosofi/data/carreaux_1km_met.gpkg")
+```
+
+```{r data_carreaux2_enligne, warning=FALSE, echo=TRUE, eval = T}
+carreaux <- sf::st_read(dsn = paste0(repertoire, "carreaux_1km_met.gpkg"))
+```
+
+2. On sélectionne quelques variables d'intérêt
+
+```{r data_carreaux}
+colnames(carreaux)
+listeIndic <- c("idcar_1km", #identifiant du carreau de 1km
+                "lcog_geo", #liste des communes qui l'intersectent
+                "ind", # Nombre d'individus du carreau
+                "men", #Nombre de ménages du carreau
+                "ind_snv" #Somme des niveaux de vie winsorisés des individus 
+                )
+
+carreaux <- carreaux %>% 
+  select(all_of(listeIndic))
+```
+
+
+3. On regarde les premières lignes.
+
+```{r affichage_carreaux}
+head(carreaux)
+```
+
+On retrouve bien nos différentes variables, ainsi que la colonne de géométrie. On a ainsi, dans un seul fichier, à la fois des informations (valeurs de certains indicateurs pour chaque carreaux) mais aussi de quoi tracer ces carreaux.
+
+4. Pour créer une carte sur le territoire qui nous intéresse, on peut ne conserver qu'une liste de communes grâce à la variable `lcog_geo`. Par exemple, on ne conserve ici que les carreaux qui intersectent l'une des 4 communes des Hauts-de-Seine suivantes : Montrouge (code géographique 92049), Malakoff (92046), Châtillon (92020) et Bagneux (92007) :
+ 
+```{r select_car}
+liste_depcom <- c("92049", "92046", "92020", "92007")
+ # écrire le code géographique de la commune, et pas son code postal
+
+position <- strsplit(carreaux$lcog_geo,'(?<=.{5})', perl=TRUE) %>%
+  lapply(function(x) any(x%in% liste_depcom)) %>%
+  unlist()
+
+carreaux_select <- carreaux[position,]
+```
+
+5. On affiche les carreaux concernés
+
+```{r carte_car_brute}
+mf_base(carreaux_select)
+```
+
+6. On cartographie le nombre de ménages par carreau : 
+
+```{r carte_car_var}
+mf_choro(carreaux_select, var = "men", col_na = "grey",
+         leg_title = "Nombre de ménages")
+```
+
+7. On agrège les données sur la zone définie (l'ensemble des carreaux qui intersectent les communes indiquées).
+
+```{r calcul_agregat}
+agregats <- carreaux_select %>%
+  st_set_geometry(NULL) %>% # Suppression de la colonne géométrie devenue inutile
+  select(-idcar_1km, -lcog_geo) %>% # Suppression des colonnes qui ne sont pas à sommer
+  summarise_all(sum) # Somme de tous les indicateurs
+print(agregats)
+```
+
+
+::: {.callout-warning collapse="false"}
+## Privilégier les sources et mailles géographiques adaptées à votre besoin
+
+- Si vous vous intéressez simplement à compter les ménages ou les individus à des niveaux supracommunaux, utilisez directement les données communales du **recensement de la population**, elles sont faite pour cela ! 
+
+- Les données carroyées de Filosofi peuvent vous servir dans le cas où vous vous intéressez à des **territoires infracommunaux** ou à des **petites communes** dont les indicateurs ont été blanchis afin de respecter le secret statistique. 
+
+:::
+
+::: {.callout-note icon=false}
+## Exercice 3  - Question 1
+
+Cartographier le **revenu moyen** par carreau de 1 km dans l'ensemble du département de **Seine-Saint-Denis** (93).
+
+```{r carte_exo_2, echo=FALSE, message=FALSE, warning=FALSE}
+# identification des carreaux qui intersectent une commune de la Seine-Saint-Denis (département 93)
+position <- strsplit(carreaux$lcog_geo,'(?<=.{5})', perl=TRUE) %>%
+  lapply(function(x) any(str_sub(x, 1, 2) == "93")) %>%
+  unlist()
+
+# extraction de ces carreaux
+carreaux_select_dep <- carreaux[position,] %>% 
+  mutate(rev_moy = ind_snv/ind)
+
+# tracé de la carte
+mf_choro(carreaux_select_dep, var = "rev_moy", col_na = "grey", border=NA,
+         leg_title = "Revenu moyen\n par carreau", leg_val_rnd = -2)
+mf_map(fond_com %>% filter(substr(code,1,2)=="93"), col=NA, add=TRUE, lwd=2)
+```
+
+:::
+
+::: {.callout-tip collapse="true"}
+## Indice
+
+Vous pouvez extraire les 2 premiers caractères des codes communes pour identifier celles concernées par un département.
+
+C'est possible par exemple grâce à la création de l'objet "position", dans la fonction lapply :
+  `lapply(function(x) any(str_sub(x, 1, 2) == "93"))`
+
+:::
+
+
+:::: {.content-hidden when-profile="exosolout"}
+::: {.callout-caution collapse="true"}
+## Solution
+
+```{r carte_exo_2, eval=FALSE}
+```
+
+:::
+::::
+
+
+::: {.callout-note icon=false}
+## Exercice 3  - Question 2
+
+Quel est le revenu moyen sur l'ensemble des ménages des carreaux du département ? 
+
+:::
+
+:::: {.content-hidden when-profile="exosolout"}
+::: {.callout-caution collapse="true"}
+## Solution
+
+```{r calcul_agregat_q2}
+agregats_dep <- carreaux_select_dep %>%
+  st_set_geometry(NULL) %>% # Suppression de la colonne géométrie devenue inutile
+  select(-idcar_1km, -lcog_geo) %>% # Suppression des colonnes qui ne sont pas à sommer
+  summarise_all(sum) %>% # Somme de tous les indicateurs
+  mutate(rev_moy = ind_snv / ind) %>% 
+  pull(rev_moy)
+print(paste0(round(agregats_dep), " euros"))
+```
+
+:::
+::::
+
+

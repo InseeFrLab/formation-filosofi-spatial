@@ -1,0 +1,9 @@
+forge:
+  interne: gitlab
+  externe: github
+  
+version: 2.1
+
+organisation: INSEE
+
+supportTechnique: support@example.com

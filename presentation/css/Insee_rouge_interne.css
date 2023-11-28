@@ -1,0 +1,90 @@
+
+
+/*Sommaire*/
+#TOC {
+  background-image: url(../img/com_interne/PageSommaire_16_9_rouge.svg);
+}
+
+/*page sommaire*/
+.toc-section-number{
+  color: #C4E1FF;
+}
+
+#TOC ul li a{
+  color: white;
+}
+
+
+/*page Titre*/
+div.backgroundTitre{
+  background-image: url(../img/com_interne/PagePartie_16_9_rouge.svg);
+}
+
+/*Page standard*/
+div.backgroundStandard {
+  background-image: url(../img/com_interne/PageStandard_16_9_rouge.svg);
+}
+
+/*Page finale*/
+div.backgroundPageFinale {
+  background-image: url(../img/com_interne/EndPage_16_9_rouge.svg);
+}
+
+
+
+
+
+
+
+/*CSS de l'impression pdf du navigateur (ctrl+p) Il s'appuie en partie sur le mode export (ex : background)*/
+
+@media print {
+  
+  #TOC{
+    position: relative !important;
+  }
+  
+  #chapters_0,
+  #chapters_1,
+  #chapters_2,
+  #chapters_3,
+  #chapters_4,
+  #chapters_5,
+  #chapters_6,
+  #chapters_7,
+  #chapters_8,
+  #chapters_9,
+  #chapters_10{
+    top: -15em !important;
+    position: relative !important;
+  }
+  
+  #pageDeFin{
+    position: relative !important;
+    top: -30em !important;
+  }
+  
+  
+/*Il faut personnaliser le css ci-dessous en fonction du type de page (titre/standard/etc.)
+Pas mis en place car il y a un décalage de +1 dans le nombre de pages à chaque fois qu'on change de chapitre*/
+  
+/*  .slide-number-pdf{
+    display: block;
+    font-size: 14px;
+    position: relative !important;
+    top: -80em;
+    left: 145em;
+    width: fit-content;
+    z-index: 31;
+  }*/
+
+  .print_code details{
+    display: contents !important;
+  }
+  
+  .no-print-pdf {
+    display: none !important;
+  }
+
+}
+

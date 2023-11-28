@@ -1,0 +1,10 @@
+title: insee-communication tout public
+author: Romain Puyau
+contributes:
+  format:
+    revealjs:
+      css: [css/Insee_Jaune_toutPublic.css]
+      title-slide-attributes:
+        data-background-image: img/com_toutPublic/TitlePage.svg
+        data-background-size: contain
+        data-background-opacity: "1"
