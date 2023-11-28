@@ -132,7 +132,7 @@ Où trouver les données ? (1/2)
 ## Solutions
 
 **1**. Le département de France métropolitaine avec le taux de pauvreté :\
-- le plus **faible** : 49 - **Maine-et-Loire** (11.1%)\
+- le plus **faible** : 85 - **Vendée** (8.9%)\
 - le plus **élevé** : 93 - **Seine-Saint-Denis** (27.6%)\
 
 **2**. L'intercommunalité de 300 000 habitants ou plus avec le taux de pauvreté le plus élevé est la **Communauté d'Agglomération de Roissy Pays de France** (22.8%)
@@ -177,7 +177,7 @@ Un de ces nombreux fichiers, nommé `cc_filosofi_2020_COM.csv` vous servira dura
 
     -   Sur les IRIS des communes d'au moins 5000 habitants
 
--   [Données sur les **quartiers de la politiques de la ville**](https://www.insee.fr/fr/statistiques/7231733?sommaire=2500477)
+-   [Données sur les **quartiers de la politique de la ville**](https://www.insee.fr/fr/statistiques/7231733?sommaire=2500477)
 
 -   [**Données carroyées** (Filosofi 2019)](https://www.insee.fr/fr/statistiques/7655515)
 
