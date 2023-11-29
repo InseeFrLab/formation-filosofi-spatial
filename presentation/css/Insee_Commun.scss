@@ -142,6 +142,10 @@ p {
 p.date{
   font-size: 65%;
   text-align: left;
+  position: absolute;
+  left: 0em;
+  top: 33.5em;
+  color: $yellow-color;
 }
 
 .reveal h1 {
@@ -167,9 +171,10 @@ p.date{
   color: $second-color-text;
 }
 
-#nomReunion {
-  top: 20%;
-  position: relative;
+#nomReunion{
+  top: 22em;
+  position: absolute;
+  right: 0em; 
 }
 
 #nomReunion p {
@@ -178,13 +183,24 @@ p.date{
   color: $yellow-color;
   margin: 0;
   padding: 0 5px;
-  background-color: #0f417a;
+  background-color: $main-color-text;
 }
 
 .slide-logo{
   max-height: 20% !important;
   right: 5% !important;
   bottom: -10px !important;
+}
+
+.quarto-title-author{
+  position: absolute;
+  left: -1%;
+  top: 19em;
+  color: $main-color-text;
+}
+
+.quarto-title-affiliation{
+  color: $main-color-text;  
 }
 
 /***********Page Sommaire ************/
@@ -206,8 +222,8 @@ p.date{
 }
 
 #TOC ul {
-  font-size: 100%;
-  margin-top: 15%;
+  font-size: 95%;
+  margin-top: 10%;
   list-style-type: none;
   padding-left: 15%;
 }
@@ -223,7 +239,7 @@ p.date{
 }
 
 #TOC ul li:not(:last-child) {
-   margin-bottom: 15%;
+   margin-bottom: 4%;
 }
 
 /***********Page Titre ************/
@@ -312,6 +328,10 @@ div.backgroundStandard {
   right: 0;
 }
 
+.titreTransparent h2{
+  opacity: 0;
+}
+
 /***********Page de fin************/
 
 div.backgroundPageFinale {
@@ -357,21 +377,22 @@ div.backgroundPageFinale {
 }
 
 
-.nomReunionFin {
-  position: relative;
-  top: 10em;
-  font-size: 0.8em;
+.nomReunionFin{
+  position: absolute;
+  top: 27em;
+  font-size: .8em;
 }
 
 .nomReunionFin p {
   color: #fdc218;
 }
 
-.divDateFin {
-  position: relative;
+.divDateFin{
+  position: absolute;
   text-align: right;
-  top: 8.4em;
-  font-size: 0.8em;
+  top: 27em;
+  font-size: .8em;
+  right: 50px;
 }
 
 #dateFin {
@@ -526,41 +547,51 @@ html.print-pdf div#footerPersonnalise {
   visibility: hidden;
 }
 
+.pdf-page #nomReunion{
+  top: 19.8em;
+}
+
+.pdf-page  p.date{
+  top: 30em;  
+}
+
+.pdf-page #TOC{
+  top: 0 !important;
+}
+
+.pdf-page .quarto-title-author{
+  top: 17em;
+}
+
 .pdf-page #toc-title{
   top: 6.4em;
 }
 
 .pdf-page #TOC ul{
-  margin-top: 10%;
+  margin-top: 13%;
 }
 
 .print-pdf .slide-logo{
   display: none !important;
 }
 
-.pdf-page .bandeauTitre{
+/*.pdf-page .bandeauTitre{
   display: none;
-}
+}*/
 
 .pdf-page .logoTopRightTitre{
   display: none;
 }
 
-.pdf-page .bandeauStandard{
+/*.pdf-page .bandeauStandard{
   display: none; 
-}
+}*/
 
 .pdf-page .logoTopRightStandard{
   display: none;
 }
 
-.pdf-page .nomReunionFin{
-  top: 18.5em !important;
-}
-
-.pdf-page .divDateFin{
-  top: 16.8em !important;
-}
+/******************CSS quand on fait fichier>Imprimer... quand on est sur le PDF EXPORT VIEW MODE**********************/
 
 @media print {
 
@@ -569,13 +600,24 @@ html.print-pdf div#footerPersonnalise {
   }
   
   .nomReunionFin{
-    display: none;
+    top: 23em;
   }
 
   .divDateFin{
+    top: 23em;
+  }
+  
+  .bandeauTitre{
+    top: -16em;
+  }
+  
+  .bandeauStandard{
     display: none;
   }
 }
+
+
+
 
 /******************Ajouts Kim**********************/
 
