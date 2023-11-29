@@ -1,5 +1,5 @@
 ---
-title: "Comment manipuler et faire parler</br>les données spatiales de revenus</br>diffusées par l’Insee ?"
+title: "Comment manipuler et faire parler </br>les données spatiales de revenus </br>diffusées par l’Insee ?"
 subtitle: "ATELIER DATAJOURNALISTES"
 date: "2023-11-28"
 date-format: "DD/MM/YYYY"
@@ -67,7 +67,7 @@ Retrouvez nous sur
 :::
 
 
-## Titre transparent {.backgroundStandard .unnamed .unnumbered .transparent}
+## Titre transparent {#section_0_1 .backgroundStandard .unnumbered .transparent}
 
 ::: enteteAvecTitre
 Annexe - Quels sont les territoires les plus pauvres ?
@@ -81,7 +81,7 @@ Annexe - Quels sont les territoires les plus pauvres ?
     -   à l'infra-départemental : par exemple dans le Finistère, la CA du Pays de Landerneau (6,9 % de personnes pauvres) jouxte la CC Monts d'Arrée (20,7 % de personnes pauvres)\
     -   à l'intérieur même des villes : par exemple, entre le Nord et le Sud de Marseille\
 
-## Titre transparent {.backgroundStandard .unnamed .unnumbered .transparent}
+## Titre transparent {#section_0_2 .backgroundStandard .unnumbered .transparent}
 
 ::: enteteAvecTitre
 Annexe - Les zonages d'étude
@@ -95,7 +95,7 @@ L'utilisation des **zonages statistiques** (ou *zonages d'étude*) permet de s'a
     -   18,5 % des habitants des pôles sont pauvres, contre 10.5% des habitants des couronnes
 
 
-## Titre transparent {.backgroundStandard .unnamed .unnumbered .transparent}
+## Titre transparent {#section_0_3 .backgroundStandard .unnumbered .transparent}
 
 ::: enteteAvecTitre
 Annexe - Illustrations reproductibles de l'opposition pôles/couronnes

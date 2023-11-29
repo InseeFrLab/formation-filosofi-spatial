@@ -2,7 +2,7 @@
 
 ## Qu'est-ce que la pauvreté ? {#section_1_1 .backgroundStandard}
 
-::: enteteAvecTitre
+::: {.enteteAvecTitre}
 Pour commencer...
 :::
 
@@ -83,7 +83,7 @@ Le **niveau de vie** d'un ménage est son **revenu disponible** *(= revenu aprè
 
 ## Première approche sur le site **Statistiques locales** {#section_2_2 .backgroundStandard}
 
-::: enteteAvecTitre
+::: {.enteteAvecTitre}
 Où trouver les données ? (1/2)
 :::
 
@@ -94,9 +94,9 @@ Où trouver les données ? (1/2)
 -   Toujours dans le panneau de gauche, vous pouvez choisir le *niveau géographique* sur lequel cartographier les données
 
 
-## Titre transparent {.backgroundStandard .unnamed .unnumbered .transparent}
+## Titre transparent {#section_2_3 .backgroundStandard .unnumbered .transparent}
 
-::: enteteAvecTitre 
+::: {.enteteAvecTitre} 
 Où trouver les données ? (1/2)
 :::
 
@@ -121,10 +121,10 @@ Où trouver les données ? (1/2)
 :::
 
 
-## Titre transparent {.backgroundStandard .unnamed .unnumbered .transparent}
+## Titre transparent {#section_2_4 .backgroundStandard .unnumbered .transparent}
 
 
-::: enteteAvecTitre
+::: {.enteteAvecTitre}
 Où trouver les données ? (1/2)
 :::
 
@@ -138,15 +138,15 @@ Où trouver les données ? (1/2)
 **2**. L'intercommunalité de 300 000 habitants ou plus avec le taux de pauvreté le plus élevé est la **Communauté d'Agglomération de Roissy Pays de France** (22.8%)
 :::
 
-::: callout-note
+::: {.callout-note}
 ## *À savoir*
 
 Le site [*Statistiques locales*](https://statistiques-locales.insee.fr) offre de nombreuses fonctionnalités : paramétrage des cartes, export des données, comparaison de territoires, édition de rapports... voir le [mode d'emploi simplifié](https://www.insee.fr/fr/statistiques/fichier/3544265/mode_emploi_statistiques_locales_simplifie.pdf) pour en savoir plus.
 :::
 
-## Fichiers détaillés téléchargeables sur [insee.fr](https://www.insee.fr/fr/accueil) {.backgroundStandard}
+## Fichiers détaillés téléchargeables sur [insee.fr](https://www.insee.fr/fr/accueil) {#section_2_5 .backgroundStandard}
 
-::: enteteAvecTitre
+::: {.enteteAvecTitre}
 Où trouver les données ? (2/2)
 :::
 
@@ -162,13 +162,13 @@ Où trouver les données ? (2/2)
         -   *Réponse : 10 790€ annuels en 2020*
         
         
-::: callout-note
+::: {.callout-note}
 
 Un de ces nombreux fichiers, nommé `cc_filosofi_2020_COM.csv` vous servira durant l'[**Exercice 2 **](..\travaux-pratiques\index.html#carte-communale-du-taux-de-pauvreté-en-bretagne) de cartographie sur R.
 
 :::
    
-## Titre transparent {.backgroundStandard .unnamed .unnumbered .transparent}
+## Titre transparent {#section_2_6 .backgroundStandard .unnumbered .transparent}
 
 
 **Niveaux infracommunaux**
@@ -188,11 +188,11 @@ Pour retrouver ces pages, utiliser la barre de recherche sur insee.fr et saisir 
 :::
 
 
-## Quelques précautions avec Filosofi {.backgroundStandard}
+## Quelques précautions avec Filosofi {#section_2_7 .backgroundStandard}
 
 <!-- *(à voir à quel moment mettre ce slide)* -->
 
-::: callout-warning
+::: {.callout-warning}
 ## Limites de la source
 
 -   **La mesure du revenu dans Filosofi est incomplète** : certains revenus, notamment ceux exonérés d'impôts (prime exceptionnelle de pouvoir d'achat, prime Covid versées aux personnels soignants etc.) peuvent manquer certaines années.
@@ -208,7 +208,7 @@ Pour retrouver ces pages, utiliser la barre de recherche sur insee.fr et saisir 
 -   Filosofi est à utiliser en **statique** : les évolutions peuvent ne pas représenter des variations de revenus mais des changements dans le degré de couverture des revenus ou de la population.
 :::
 
-::: callout-note
+::: {.callout-note}
 ## Quelques références
 
 -   [*L'Essentiel sur...la pauvreté*](https://www.insee.fr/fr/statistiques/5759045#onglet-1)\
@@ -216,7 +216,7 @@ Pour retrouver ces pages, utiliser la barre de recherche sur insee.fr et saisir 
 -   [*Pauvreté et territoires : davantage de jeunes et de locataires du parc social dans les grandes villes, plus de retraités parmi les pauvres dans le rural*](https://www.insee.fr/fr/information/7676709) : une publication nationale + un dossier pour chaque région
 :::
 
-## Titre transparent {.backgroundStandard .unnamed .unnumbered .transparent}
+## Titre transparent {#section_2_8 .backgroundStandard .unnumbered .transparent}
 
 
 [**Exercice 2 **](..\travaux-pratiques\index.html#carte-communale-du-taux-de-pauvreté-en-bretagne)

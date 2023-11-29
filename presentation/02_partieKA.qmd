@@ -1,8 +1,8 @@
 # Manipuler et interpréter des données au carreau {#chapters_3 .backgroundTitre}
 
-## Titre transparent {.backgroundStandard .unnamed .unnumbered .transparent}
+## Titre transparent {#section_3_1 .backgroundStandard .unnumbered .transparent}
 
-::: enteteAvecTitre
+::: {.enteteAvecTitre}
 Visualisation interactive en ligne
 :::
 
@@ -31,10 +31,10 @@ Les données de Filosofi sont également disponibles sur des **carreaux**
 ::::
 
 
-## Titre transparent {.backgroundStandard .unnamed .unnumbered .transparent}
+## Titre transparent {#section_3_2 .backgroundStandard .unnumbered .transparent}
 
 
-::: enteteAvecTitre
+::: {.enteteAvecTitre}
 Variables mises à disposition
 :::
 
@@ -51,9 +51,9 @@ Variables mises à disposition
   * Composition des ménages
   * ...
 
-## Titre transparent {.backgroundStandard .unnamed .unnumbered .transparent}
+## Titre transparent {#section_3_3 .backgroundStandard .unnumbered .transparent}
 
-::: enteteAvecTitre
+::: {.enteteAvecTitre}
 Interprétation des cartes
 :::
 
@@ -67,7 +67,7 @@ _79 % des carreaux habités de France métropolitaine comprennent moins de 11 m
 
  ➡️  C’est pourquoi les données carroyées ne s’apprécient pas « carreau » par « carreau » mais sur un **paysage de carreaux** permettant, par exemple, d’identifier des poches de pauvreté au sein des villes. 
 
-## Titre transparent {.backgroundStandard .unnamed .unnumbered .transparent}
+## Titre transparent {#section_3_4 .backgroundStandard .unnumbered .transparent}
 
 [**Exercice 3**](..\travaux-pratiques\index.html#manipuler-les-données-carroyées-de-filosofi)
 
